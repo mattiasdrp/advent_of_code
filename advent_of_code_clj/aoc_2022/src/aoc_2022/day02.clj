@@ -9,11 +9,11 @@
 (defn- shifumi [ce cp]
   (cond
     (= cp ce) 0
-    (= cp (mod (+ ce 1) 3)) 1
+    (= cp (mod (inc ce) 3)) 1
     :else -1))
 
 (defn- score [ce cp]
-  (+ (+ cp 1) (+ 3 (* (shifumi ce cp) 3))))
+  (+ (inc cp) (+ 3 (* (shifumi ce cp) 3))))
 
 (defn part-1 [file]
   (utils/reduce-file file (fn [acc line]
@@ -28,7 +28,7 @@
 ;; which is perfect since Z is 1 so just (c + 1) mod 3
 ;; The same goes for lose, -1 mod 3 and draw, + 0
 (defn- player-choice [ce cres]
-  (+ 1 (mod (+ ce cres) 3)))
+  (inc (mod (+ ce cres) 3)))
 
 (defn- score-choice [ce cres]
   (+ (player-choice ce cres) (+ 3 (* cres 3))))
