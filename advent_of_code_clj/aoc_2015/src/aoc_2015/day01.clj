@@ -1,5 +1,4 @@
-(ns aoc-2015.day01
-  (:require [aoc-utils.core :as utils]))
+(ns aoc-2015.day01)
 
 (defn- transform [acc c]
   (case c
