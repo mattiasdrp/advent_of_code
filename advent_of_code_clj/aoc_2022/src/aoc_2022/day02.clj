@@ -16,11 +16,11 @@
   (+ (inc cp) (+ 3 (* (shifumi ce cp) 3))))
 
 (defn part-1 [file]
-  (utils/reduce-file file (fn [acc line]
-                            (let [[ce _ cp] (seq line)
-                                  ce (- (int ce) (int \A))
-                                  cp (- (int cp) (int \X))]
-                              (+ acc (score ce cp)))) 0))
+  (utils/reduce-file (fn [acc line]
+                       (let [[ce _ cp] (seq line)
+                             ce (- (int ce) (int \A))
+                             cp (- (int cp) (int \X))]
+                         (+ acc (score ce cp)))) 0 file))
 
 ;; Once again, we decide to place ourselves in ℤ/3ℤ
 ;; We transform X, must lose, in -1, Y, draw, in 0 and Z, must win, in 1
@@ -34,8 +34,8 @@
   (+ (player-choice ce cres) (+ 3 (* cres 3))))
 
 (defn part-2 [file]
-  (utils/reduce-file file (fn [acc line]
-                            (let [[ce _ cres] (seq line)
-                                  ce (- (int ce) (int \A))
-                                  cres (- (int cres) (int \Y))]
-                              (+ acc (score-choice ce cres)))) 0))
+  (utils/reduce-file (fn [acc line]
+                       (let [[ce _ cres] (seq line)
+                             ce (- (int ce) (int \A))
+                             cres (- (int cres) (int \Y))]
+                         (+ acc (score-choice ce cres)))) 0 file))

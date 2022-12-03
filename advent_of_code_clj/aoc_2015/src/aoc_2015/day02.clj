@@ -12,12 +12,12 @@
        (apply *)))
 
 (defn part-1 [file]
-  (utils/reduce-file file (fn [acc line]
-                            (let [[l w h] (str/split line #"x")
-                                  l (read-string l)
-                                  w (read-string w)
-                                  h (read-string h)]
-                              (+ acc (surface l w h) (area-smaller l w h)))) 0))
+  (utils/reduce-file (fn [acc line]
+                       (let [[l w h] (str/split line #"x")
+                             l (read-string l)
+                             w (read-string w)
+                             h (read-string h)]
+                         (+ acc (surface l w h) (area-smaller l w h)))) 0 file))
 
 (defn- perimeter-smaller [l w h]
   (->> (list l w h)
@@ -26,9 +26,9 @@
        (reduce #(+ %1 (* 2 %2)) 0)))
 
 (defn part-2 [file]
-  (utils/reduce-file file (fn [acc line]
-                            (let [[l w h] (str/split line #"x")
-                                  l (read-string l)
-                                  w (read-string w)
-                                  h (read-string h)]
-                              (+ acc (* l w h) (perimeter-smaller l w h)))) 0))
+  (utils/reduce-file (fn [acc line]
+                       (let [[l w h] (str/split line #"x")
+                             l (read-string l)
+                             w (read-string w)
+                             h (read-string h)]
+                         (+ acc (* l w h) (perimeter-smaller l w h)))) 0 file))

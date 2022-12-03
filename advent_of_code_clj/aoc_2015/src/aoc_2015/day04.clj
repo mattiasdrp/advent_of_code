@@ -19,7 +19,7 @@
 (defn part-2 [file]
   (let [k (str/trim (slurp file))
         res (for [i (iterate inc 1)
-                  :let [hash (do (prn i) (md5 (str k i)))]
+                  :let [hash (md5 (str k i))]
                   :when (= (subs hash 0 6) "000000")] i)]
     (first res)))
 

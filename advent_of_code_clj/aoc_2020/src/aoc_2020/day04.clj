@@ -24,7 +24,7 @@
       :else (update acc :curr_pass parse-partial-passport line)))
 
   (defn part-1 [file]
-    (:res (utils/reduce-file-newline file parse-or-return {:res 0 :curr_pass #{}}))))
+    (:res (utils/reduce-file-newline parse-or-return {:res 0 :curr_pass #{}} file))))
 
 ;; Second version, start from the set of all possible fields and remove them one by one
 
@@ -40,7 +40,7 @@
     :else (update acc :rem_fields parse-partial-passport line)))
 
 (defn part-1 [file]
-  (:res (utils/reduce-file-newline file parse-or-return {:res 0 :rem_fields fields})))
+  (:res (utils/reduce-file-newline parse-or-return {:res 0 :rem_fields fields} file)))
 
 ;; -----------
 ;; Part 2
@@ -86,7 +86,7 @@
     :else (update acc :curr_pass parse-partial-passport2 line)))
 
 (defn part-2 [file]
-  (:res (utils/reduce-file-newline file parse-or-return2 {:res 0 :curr_pass {}})))
+  (:res (utils/reduce-file-newline parse-or-return2 {:res 0 :curr_pass {}} file)))
 
 #_(part-2 (clojure.java.io/resource "day04-example"))
 #_(valid-passport? (parse-partial-passport2 {} "pid:087499704 hgt:74in ecl:grn iyr:2012 eyr:2030 byr:1980 hcl:#623a2f"))

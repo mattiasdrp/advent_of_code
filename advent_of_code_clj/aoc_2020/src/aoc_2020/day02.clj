@@ -14,8 +14,7 @@
 #_(not (valid-passport1 "1-3 a: abcdeaaa"))
 
 (defn part-1 [file]
-  (utils/reduce-file file
-                     (fn [acc line] (if (valid-passport1 line) (inc acc) acc)) 0))
+  (utils/reduce-file (fn [acc line] (if (valid-passport1 line) (inc acc) acc)) 0 file))
 
 (defn- valid-passport2
   "Splits the `line` in first pos, second pos, the character `ch` to which the rule is applied and the passport that needs to be checked.
@@ -32,5 +31,4 @@
 #_(not (valid-passport2 "1-3 a: abadeaaa"))
 
 (defn part-2 [file]
-  (utils/reduce-file file
-                     (fn [acc line] (if (valid-passport2 line) (inc acc) acc)) 0))
+  (utils/reduce-file (fn [acc line] (if (valid-passport2 line) (inc acc) acc)) 0 file))

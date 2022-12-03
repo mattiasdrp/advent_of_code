@@ -11,7 +11,7 @@
 #_(parse-or-return {:res 0 :curr_cals 500} "1000")
 
 (defn part-1 [file]
-  (:res (utils/reduce-file-newline file parse-or-return {:res 0 :curr_cals 0})))
+  (:res (utils/reduce-file-newline parse-or-return {:res 0 :curr_cals 0} file)))
 
 #_(part-1 (clojure.java.io/resource "day01-example"))
 
@@ -35,7 +35,7 @@
 #_(parse-or-return2 {:res '(1000 800 600) :curr_cals 1500} "")
 
 (defn part-2 [file]
-  (as-> (utils/reduce-file-newline file parse-or-return2 {:res '() :curr_cals 0}) res
+  (as-> (utils/reduce-file-newline parse-or-return2 {:res '() :curr_cals 0} file) res
     (:res res)
     (reduce + res)))
 

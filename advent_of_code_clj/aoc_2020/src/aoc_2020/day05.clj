@@ -30,7 +30,7 @@
 #_(id "FBFBBFFRLR")
 
 (defn part-1 [file]
-  (utils/reduce-file file (fn [acc line] (max acc (id line))) 0))
+  (utils/reduce-file (fn [acc line] (max acc (id line))) 0 file))
 
 #_(part-1 (clojure.java.io/resource "day05-example"))
 
@@ -46,7 +46,7 @@
 
 (defn part-2 [file]
   (as->
-   (utils/reduce-file file (fn [acc line] (conj acc (id line))) #{}) set
+   (utils/reduce-file (fn [acc line] (conj acc (id line))) #{} file) set
     (sort set)
     (find-gap set)))
 
