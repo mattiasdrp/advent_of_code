@@ -27,5 +27,3 @@
   (utils/reduce-file overlap 0 file))
 
 #_(part-2 (clojure.java.io/resource "day04"))
-
-#_(map (rea

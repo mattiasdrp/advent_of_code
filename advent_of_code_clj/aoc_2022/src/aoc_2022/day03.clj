@@ -26,11 +26,13 @@
     (let [seq (line-seq rdr)]
       (loop [acc 0
              [l1 l2 l3 & tl] seq]
-        (if (nil? l1) acc
-            (let [l1 (into #{} l1)
-                  l2 (into #{} l2)
-                  l3 (into #{} l3)
-                  elem (int (first (set/intersection l1 l2 l3)))]
-              (recur (+ acc (priority elem)) tl)))))))
+        (if (nil? l1)
+          acc
+
+          (let [l1 (into #{} l1)
+                l2 (into #{} l2)
+                l3 (into #{} l3)
+                elem (int (first (set/intersection l1 l2 l3)))]
+            (recur (+ acc (priority elem)) tl)))))))
 
 #_(part-2 (clojure.java.io/resource "day03-example"))
