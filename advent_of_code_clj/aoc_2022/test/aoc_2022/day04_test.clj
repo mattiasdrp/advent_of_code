@@ -12,7 +12,7 @@
     (is (= expected (part-1 (resource "day04"))))))
 
 (deftest part2-example
-  (let [expected 7]
+  (let [expected 4]
     (is (= expected (part-2 (resource "day04-example"))))))
 
 (deftest part2

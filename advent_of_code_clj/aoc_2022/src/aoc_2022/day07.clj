@@ -1,6 +1,6 @@
 (ns aoc-2022.day07
-  (:require [aoc-utils.core :as utils]
-            [clojure.pprint]))
+  (:require
+   [aoc-utils.core :as utils]))
 
 ;; A map of dirs
 ;; a dir is {:parent string :children #{node set}}

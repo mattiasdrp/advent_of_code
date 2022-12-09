@@ -51,10 +51,8 @@
 
 #_(part-1 (clojure.java.io/resource "day08"))
 
-(defn- m-abs [n] (max n (- n)))
-
 (defn- find-closer [index indexacc [_ nindex]]
-  (if (> (m-abs (- index indexacc)) (m-abs (- index nindex))) nindex indexacc))
+  (if (> (abs (- index indexacc)) (abs (- index nindex))) nindex indexacc))
 
 #_(into {} (filter #(> (first %) 3) {2 3, 3 4, 4 5}))
 
@@ -68,7 +66,7 @@
         scenics (into {} (filter #(>= (first %) height) scenics))
         nscenics (assoc scenics height index)
         closer (reduce (partial find-closer index) ##Inf scenics)
-        nscenic (m-abs (- index closer))]
+        nscenic (abs (- index closer))]
       ;; the closer pair is the one that blocks our view
       ;; (because its height is necessarily greater than the current one)
       ;; By construction we know that all the computed pairs indices are either
@@ -119,6 +117,6 @@
                0 scells)]
     count))
 
-#_(part-2 (clojure.java.io/resource "day08-test"))
+#_(part-2 (clojure.java.io/resource "day08-example"))
 
 #_(part-2 (clojure.java.io/resource "day08"))

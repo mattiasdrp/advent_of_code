@@ -1,7 +1,6 @@
 (ns aoc-2022.day06)
 
 (defn- find-firstn [line n]
-  (prn line)
   (loop [[_ & rest :as l] (seq line)
          index n]
     (if (= n (count (set (take n l))))

@@ -15,7 +15,7 @@
 (defn part-1 [file]
   (utils/reduce-file cover 0 file))
 
-#_(part-1 (clojure.java.io/resource "day04"))
+#_(part-1 (clojure.java.io/resource "day04-example"))
 
 (defn- overlap [acc line]
   (let [[low1  high1 low2 high2] (parse line)]
