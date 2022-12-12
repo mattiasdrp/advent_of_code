@@ -34,3 +34,7 @@
   [file f]
   (with-open [rdr (clojure.java.io/reader file)]
     (doall (map f (line-seq rdr)))))
+
+(defn update-map [m f]
+  (reduce-kv (fn [m k v]
+               (assoc m k (f v))) {} m))

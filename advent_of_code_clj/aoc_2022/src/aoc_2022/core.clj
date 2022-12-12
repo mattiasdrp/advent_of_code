@@ -11,7 +11,8 @@
    [aoc-2022.day08]
    [aoc-2022.day09]
    [aoc-2022.day10]
-   [aoc-2022.day11]))
+   [aoc-2022.day11]
+   [aoc-2022.day12]))
 
 (defn -main [part]
   (case part
@@ -37,4 +38,6 @@
     "d10.p2" (println (aoc-2022.day10/part-2 (resource "day10")))
     "d11.p1" (println (aoc-2022.day11/part-1 (resource "day11")))
     "d11.p2" (println (aoc-2022.day11/part-2 (resource "day11")))
+    "d12.p1" (println (aoc-2022.day12/part-1 (resource "day12")))
+    "d12.p2" (println (aoc-2022.day12/part-2 (resource "day12")))
     (println (str part " not found"))))
