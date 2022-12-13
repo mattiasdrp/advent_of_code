@@ -1,0 +1,73 @@
+#+TITLE: Congruence for day 11 of AoC 2022
+#+AUTHOR: mattiasdrp
+#+DATE: <2022-12-13 mar.>
+#+LANGUAGE: en_US
+
+#+OPTIONS: toc:nil
+#+LATEX_CLASS: article
+#+LATEX_CLASS_OPTIONS: [fleqn, a4paper, 12pt]
+#+LATEX_HEADER_EXTRA: \usepackage{multicol}
+#+LATEX_HEADER_EXTRA: \usepackage[a4paper, top=20mm]{geometry}
+#+LATEX_HEADER_EXTRA: \usepackage[nodisplayskipstretch]{setspace}
+#+LATEX_HEADER_EXTRA: \setlength\parindent{0pt}
+#+KEYWORDS: math advent code
+
+We want to prove that if $n \equiv r_1 [q_1] \dots n \equiv r_n [q_n]$ and if $n \equiv N [q_{}_1 \dots q_{n}]$ then $N \equiv r_1 [q_1] \dots N \equiv r_n [q_n$]
+\begin{multicols}{2}
+
+Let
+\begin{align*}
+n \equiv r_1 [q_1]\\
+n \equiv r_2 [q_2]
+\end{align*}
+and
+\begin{align*}
+n \equiv N [q_1 * q_2]
+\end{align*}
+We know that
+\begin{align*}
+a \equiv b [n] \Leftrightarrow b \equiv a [n]
+\end{align*}
+So
+\begin{align*}
+N \equiv n [q_1 * q_2]
+\end{align*}
+But if
+\begin{align*}
+N \equiv n [q_{1}_{}_{} * q_{2}]
+\end{align*}
+then
+\begin{align*}
+N \equiv n [q_{1}]\\
+N \equiv n [q_{2}]
+\end{align*}
+because
+\begin{align*}
+N &= (q_1*q_2)*k + n & \Leftrightarrow \quad & N \equiv n [q_1*q_2]\\
+   &= q_1 * (q_2 * k) + n & \Leftrightarrow \quad & N \equiv n [q_1]\\
+   &= q_2 * (q_1 * k) + n & \Leftrightarrow \quad & N \equiv n [q_2]
+\end{align*}
+
+\columnbreak
+
+We proved that
+\begin{align*}
+N \equiv n [q_1]\\
+N \equiv n [q_2]
+\end{align*}
+The transitivity of modulo says that
+\begin{align*}
+\text{if } a \equiv b [q] \text{ and } b \equiv c [q] \text{ then } a \equiv c [q]
+\end{align*}
+Since
+\begin{align*}
+n \equiv r_1 [q_1]\\
+n \equiv r_2 [q_2]
+\end{align*}
+Then
+\begin{align*}
+N \equiv r_1 [q_1]\\
+N \equiv r_2 [q_2]
+\end{align*}
+
+\end{multicols}
