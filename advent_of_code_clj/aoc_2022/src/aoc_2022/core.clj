@@ -14,7 +14,9 @@
    [aoc-2022.day11]
    [aoc-2022.day12]
    [aoc-2022.day13]
-   [aoc-2022.day14]))
+   [aoc-2022.day14]
+   [aoc-2022.day16]
+   [aoc-2022.day17]))
 
 (defn -main [part]
   (case part
@@ -45,5 +47,11 @@
     "d13.p1" (println (aoc-2022.day13/part-1 (resource "day13")))
     "d13.p2" (println (aoc-2022.day13/part-2 (resource "day13")))
     "d14.p1" (println (aoc-2022.day14/part-1 (resource "day14")))
-    ;; "d14.p2" (println (aoc-2022.day14/part-2 (resource "day14")))
+    "d14.p2" (println (aoc-2022.day14/part-2 (resource "day14")))
+    "d16.p1" (println (aoc-2022.day16/part-1 (resource "day16")))
+    "d16.p2" (println (aoc-2022.day16/part-2 (resource "day16")))
+    "d17.p1" (println (aoc-2022.day17/part-1 (resource "day17") 50))
+    "d17.p11" (println (aoc-2022.day17/part-1 (resource "day17-example") 10))
+    "d17.p2" (println (aoc-2022.day17/part-2 (resource "day17") 50))
+    "d17.p21" (println (aoc-2022.day17/part-2 (resource "day17-example") 50))
     (println (str part " not found"))))

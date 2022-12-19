@@ -31,6 +31,7 @@
     :else
     (lcompare (lvec l1) (lvec l2))))
 
+#_(lcompare [1 1 1 1] [1 1 1 1])
 (defn part-1 [file]
   (with-open [rdr (reader file)]
     (loop [[l1 l2 _ & rest] (line-seq rdr)
