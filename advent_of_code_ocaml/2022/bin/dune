@@ -1,8 +1,8 @@
 (executable
  (name main)
- (public_name program)
-  (libraries mdrp_lib)
-)
+ (package aoc_2022)
+ (public_name aoc_2022)
+ (libraries mdrp_lib days))
 
 (env
  (dev
