@@ -1,0 +1,9 @@
+(executable
+ (name main)
+ (package aoc_year)
+ (public_name aoc_year)
+ (libraries mdrp_lib days))
+
+(env
+ (dev
+  (flags (:standard -warn-error -A))))

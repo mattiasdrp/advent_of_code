@@ -1,9 +1,0 @@
-(executable
- (name main)
- (public_name program)
-  (libraries mdrp_lib)
-)
-
-(env
- (dev
-  (flags (:standard -warn-error -A))))
