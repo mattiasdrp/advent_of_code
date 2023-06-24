@@ -20,7 +20,6 @@ let part_1 file =
         (fun j acc v -> if check_neighbours a i j v then acc + v + 1 else acc)
         acc a')
     0 a
-  |> Format.printf "%d@."
 
 let cpt =
   let cpt = ref 0 in
@@ -76,8 +75,7 @@ let part_2 file =
   IM.fold (fun _ size acc -> size :: acc) im []
   |> List.fast_sort Int.compare_dec
   |> function
-  | hd1 :: hd2 :: hd3 :: _ -> Format.printf "%d@." (hd1 * hd2 * hd3)
+  | hd1 :: hd2 :: hd3 :: _ -> hd1 * hd2 * hd3
   | _ -> assert false
 
-let run part file =
-  match part with 1 -> part_1 file | 2 -> part_2 file | _ -> ()
+let run part file = match part with 1 -> part_1 file | _ -> part_2 file

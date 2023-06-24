@@ -117,8 +117,7 @@ let dijkstra matrix =
       let current, modified = CellSet.get_min_distance modified in
       dijsktra current modified
   in
-  let dist = dijsktra matrix.(0).(0) CellSet.empty in
-  Format.printf "%d@." dist
+  dijsktra matrix.(0).(0) CellSet.empty
 
 let greedy_shortest_path matrix =
   let open Cell in
@@ -142,7 +141,7 @@ let greedy_shortest_path matrix =
     if Queue.is_empty queue then matrix.(width - 1).(height - 1).distance
     else loop ()
   in
-  loop () |> Format.printf "%d@."
+  loop ()
 
 let part_1 file algo =
   let matrix =
@@ -221,4 +220,4 @@ let part_2 file algo =
       dijkstra matrix
 
 let run part file algo =
-  match part with 1 -> part_1 file algo | 2 -> part_2 file algo | _ -> ()
+  match part with 1 -> part_1 file algo | _ -> part_2 file algo

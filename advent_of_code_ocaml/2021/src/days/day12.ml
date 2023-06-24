@@ -28,7 +28,7 @@ let pathes m =
   and pathes_from cave (cpt, visited) = fold (cpt, visited) (SM.find cave m) in
   pathes_from "start" (0, SS.singleton "start")
 
-let part_1 m = pathes m |> Format.printf "%d@."
+let part_1 m = pathes m
 
 let pathes m =
   let rec fold (cpt, visited, twice) = function
@@ -56,7 +56,7 @@ let pathes m =
   in
   pathes_from "start" (0, SS.singleton "start", false)
 
-let part_2 m = pathes m |> Format.printf "%d@."
+let part_2 m = pathes m
 
 let run part file =
   let m =
@@ -67,4 +67,4 @@ let run part file =
         | _ -> assert false)
       SM.empty file
   in
-  match part with 1 -> part_1 m | 2 -> part_2 m | _ -> ()
+  match part with 1 -> part_1 m | _ -> part_2 m

@@ -42,12 +42,12 @@ let part_1 start rules chars max_loops =
       SS.fold
         (fun _ cpt (minc, maxc) -> (min cpt minc, max cpt maxc))
         chars (max_int, min_int)
-      |> fun (min, max) -> Format.printf "%d@." (max - min)
+      |> fun (min, max) -> max - min
     else loop (l + 1) (aux (bag, chars))
   in
   loop 1 (start, chars)
 
-let run part file rounds =
+let run part file =
   let ci = open_in file in
   let start, chars =
     input_line ci
@@ -79,5 +79,4 @@ let run part file rounds =
   in
   match part with
   | 1 -> part_1 start rules chars 10
-  | 2 -> part_1 start rules chars rounds
-  | _ -> ()
+  | _ -> part_1 start rules chars 40

@@ -116,7 +116,9 @@ module Grid = struct
               grid.(i).(6) <- Pod p3;
               grid.(i).(8) <- Pod p4;
               p1 :: p2 :: p3 :: p4 :: pods
-          | _ -> assert false
+          | _ ->
+              Format.eprintf "%s@." s;
+              assert false
         in
         aux (i + 1) pods
     in
@@ -329,7 +331,7 @@ module Grid = struct
 end
 
 let run part file =
-  (match part with 1 -> part_1 () | 2 -> part_2 () | _ -> ());
+  (match part with 1 -> part_1 () | _ -> part_2 ());
   let grid, pods = Grid.init file in
   let min_cost, _min_path = Grid.solve grid pods in
-  Format.printf "%d@." min_cost
+  min_cost

@@ -135,8 +135,7 @@ let part_1 file =
       let n = Number.of_string s in
       if first then (false, n) else (first, Number.add acc n))
     (true, Int 0) file
-  |> fun (_, n) ->
-  Format.printf "@[<v 1>%a@.%d@." Number.(pp ()) n Number.(magnitude n)
+  |> fun (_, n) -> Number.(magnitude n)
 
 let part_2 file =
   let l = Parse.fold_lines (fun acc s -> Number.of_string s :: acc) [] file in
@@ -152,7 +151,6 @@ let part_2 file =
           tl
     | [] -> acc
   in
-  aux 0 l |> Format.printf "%d@."
+  aux 0 l
 
-let run part file =
-  match part with 1 -> part_1 file | 2 -> part_2 file | _ -> ()
+let run part file = match part with 1 -> part_1 file | _ -> part_2 file

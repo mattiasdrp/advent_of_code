@@ -19,7 +19,7 @@ let part_1 file =
     | exception End_of_file -> acc
   in
 
-  aux_parse 0 |> Format.printf "%d@."
+  aux_parse 0
 
 module Digits = struct
   include Set.Make (Char)
@@ -85,10 +85,9 @@ let part_2 file =
         | _ -> assert false)
     | exception End_of_file -> acc
   in
-  aux_parse 0 |> Format.printf "%d@."
+  aux_parse 0
 
-let run part file =
-  match part with 1 -> part_1 file | 2 -> part_2 file | _ -> ()
+let run part file = match part with 1 -> part_1 file | _ -> part_2 file
 
 (* module Digits = struct *)
 (*   module M = Map.Make (Char) *)

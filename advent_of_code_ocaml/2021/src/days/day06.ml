@@ -35,12 +35,10 @@ let span_days days map =
   aux 0 map
 
 let nb_fishes map = Int.Map.fold (fun _ cpt sum -> cpt + sum) map 0
-let part_1 l = nb_fishes (span_days 80 l) |> Format.printf "%d@."
-let part_2 l = nb_fishes (span_days 256 l) |> Format.printf "%d@."
+let part_1 l = nb_fishes (span_days 80 l)
+let part_2 l = nb_fishes (span_days 256 l)
 
-let run () =
-  let part = try Sys.argv.(1) with _ -> "2" in
-  let file = try Sys.argv.(2) with _ -> "input" in
+let run part file =
   let fishes =
     Parse.fold_parse ~sep:','
       (fun map age ->
@@ -50,7 +48,7 @@ let run () =
           map)
       Int.Map.empty file
   in
-  match part with "1" -> part_1 fishes | "2" -> part_2 fishes | _ -> ()
+  match part with 1 -> part_1 fishes | _ -> part_2 fishes
 
 (* From @remyzorg *)
 (* Array is the following [| day0; day1; day2; ...; day7; day8 |] *)
@@ -67,7 +65,7 @@ let next_day array day =
 
 let compute array max_days =
   let rec aux day =
-    if day = max_days then Array.fold_left ( + ) 0 array |> Format.printf "%d@."
+    if day = max_days then Array.fold_left ( + ) 0 array
     else (
       next_day array day;
       aux (day + 1))
@@ -81,4 +79,4 @@ let run part file =
       let age = int_of_string age in
       fishes.(age) <- fishes.(age) + 1)
     () file;
-  match part with 1 -> compute fishes 80 | 2 -> compute fishes 256 | _ -> ()
+  match part with 1 -> compute fishes 80 | _ -> compute fishes 256

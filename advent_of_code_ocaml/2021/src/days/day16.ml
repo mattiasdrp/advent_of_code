@@ -151,19 +151,16 @@ let parse s =
 
 let part_1 file =
   Parse.fold_lines
-    (fun () s ->
+    (fun acc s ->
       let v, _off = parse s |> Option.get in
-      let vsum = sum_version v in
-      Format.printf "%d@." vsum)
-    () file
+      sum_version v)
+    0 file
 
 let part_2 file =
   Parse.fold_lines
-    (fun () s ->
+    (fun acc s ->
       let v, _off = parse s |> Option.get in
-      let vsum = compute v in
-      Format.printf "%d@." vsum)
-    () file
+      compute v)
+    0 file
 
-let run part file =
-  match part with 1 -> part_1 file | 2 -> part_2 file | _ -> ()
+let run part file = match part with 1 -> part_1 file | _ -> part_2 file

@@ -146,7 +146,7 @@ let part_1 grid sets empty left top =
     let grid, empty, sets, changed = Grid.step sets grid empty left top in
     if changed then aux grid empty sets (i + 1) else i
   in
-  aux grid empty sets 1 |> Format.printf "%d@."
+  aux grid empty sets 1
 
 let run file =
   let grid, sets, empty, top, left = Grid.init file in

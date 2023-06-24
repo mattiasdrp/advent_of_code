@@ -26,52 +26,56 @@ let part_1 map numbers matrices =
                 List.iter (fun (i, j) -> update_array matrices.(id) i j) l)
               idmap
         | None -> ())
-      numbers
+      numbers;
+    assert false
   with Result (a, called) ->
-    Format.printf "%d@."
-      (Array.fold_lefti
-         (fun i acc a ->
-           if i = 0 then acc
-           else
-             Array.fold_lefti
-               (fun i acc v -> if i = 0 then acc else acc + v)
-               acc a)
-         0 a
-      * called)
+    Array.fold_lefti
+      (fun i acc a ->
+        if i = 0 then acc
+        else
+          Array.fold_lefti (fun i acc v -> if i = 0 then acc else acc + v) acc a)
+      0 a
+    * called
 
 (* Keep a set of all finished boards so once we reach the last one we return its value *)
 let part_2 map numbers matrices =
+  let exception Res of int in
   let bound = Array.length matrices in
-  List.fold_left
-    (fun finished v ->
-      match Int.Map.find_opt v map with
-      | Some idmap ->
-          Int.Map.fold
-            (fun id l finished ->
-              List.fold_left
-                (fun finished (i, j) ->
-                  try
-                    update_array matrices.(id) i j;
-                    finished
-                  with Result (a, called) ->
-                    let finished = Int.Set.add id finished in
-                    if Int.Set.cardinal finished = bound then (
-                      Format.printf "%d@."
-                        (Array.fold_lefti
-                           (fun i acc a ->
-                             if i = 0 then acc
-                             else
-                               Array.fold_lefti
-                                 (fun i acc v -> if i = 0 then acc else acc + v)
-                                 acc a)
-                           0 a
-                        * called);
-                      exit 0)
-                    else finished)
-                finished l)
-            idmap finished
-      | None -> finished)
-    Int.Set.empty numbers
+  try
+    ignore
+      (List.fold_left
+         (fun finished v ->
+           match Int.Map.find_opt v map with
+           | Some idmap ->
+               Int.Map.fold
+                 (fun id l finished ->
+                   List.fold_left
+                     (fun finished (i, j) ->
+                       try
+                         update_array matrices.(id) i j;
+                         finished
+                       with Result (a, called) ->
+                         let finished = Int.Set.add id finished in
+                         if Int.Set.cardinal finished = bound then
+                           raise
+                             (Res
+                                (Array.fold_lefti
+                                   (fun i acc a ->
+                                     if i = 0 then acc
+                                     else
+                                       Array.fold_lefti
+                                         (fun i acc v ->
+                                           if i = 0 then acc else acc + v)
+                                         acc a)
+                                   0 a
+                                * called))
+                         else finished)
+                     finished l)
+                 idmap finished
+           | None -> finished)
+         Int.Set.empty numbers);
+    assert false
+  with Res i -> i
 
 let run part file =
   let numbers, map, matrices =
@@ -156,5 +160,4 @@ let run part file =
   in
   match part with
   | 1 -> part_1 map numbers matrices
-  | 2 -> ignore (part_2 map numbers matrices)
-  | _ -> ()
+  | _ -> part_2 map numbers matrices

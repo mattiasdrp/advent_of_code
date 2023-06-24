@@ -189,7 +189,6 @@ let part_1 file =
   List.fold_left
     (fun acc c -> if c.Cube.lit = On then acc + Cube.size c else acc)
     0 l
-  |> Format.printf "%d@."
 
 let part_2 file =
   let l =
@@ -212,7 +211,6 @@ let part_2 file =
       (fun acc c -> if c.Cube.lit = On then acc + Cube.size c else acc)
       0 l
   in
-  Format.printf "%d@." total
+  total
 
-let run part file =
-  match part with 1 -> part_1 file | 2 -> part_2 file | _ -> ()
+let run part file = match part with 1 -> part_1 file | _ -> part_2 file

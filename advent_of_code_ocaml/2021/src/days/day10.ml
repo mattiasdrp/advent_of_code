@@ -38,7 +38,6 @@ let part_1 file =
         |> fun _ -> corrupted
       with Wrong_Closing c -> corrupted + score c)
     0 file
-  |> Format.eprintf "%d@."
 
 let score = function
   | '(' -> 1
@@ -72,7 +71,6 @@ let part_2 file =
         |> fun c -> c :: acc
       with Wrong_Closing _ -> acc)
     [] file
-  |> List.fast_sort Int.compare |> get_middle |> Format.printf "%d@."
+  |> List.fast_sort Int.compare |> get_middle
 
-let run part file =
-  match part with 1 -> part_1 file | 2 -> part_2 file | _ -> ()
+let run part file = match part with 1 -> part_1 file | _ -> part_2 file

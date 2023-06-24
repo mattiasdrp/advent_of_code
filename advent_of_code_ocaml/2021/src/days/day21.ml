@@ -28,8 +28,8 @@ let part_1 p1 p2 =
     if p1.score >= 1000 then (p1.score, p2.Player.score, rounds)
     else aux (rounds + 1) (p2, p1)
   in
-  let s1, s2, rounds = aux 1 (p1, p2) in
-  Format.printf "%d, %d, %d, %d@." s1 s2 rounds (s2 * rounds * 3)
+  let _, s2, rounds = aux 1 (p1, p2) in
+  s2 * rounds * 3
 
 let moves =
   let move dice ((p1, p2), from) card =
@@ -41,7 +41,7 @@ let moves =
 
 let part_2 p1 p2 =
   let rec aux (acc, p1win, p2win) swap =
-    if acc = [] then Format.printf "%d@." (max p1win p2win)
+    if acc = [] then max p1win p2win
     else
       (* This is the part where I should memoise but DotA is calling me *)
       let acc = List.fold_left moves [] acc in
@@ -64,7 +64,4 @@ let run part file =
   let ci = open_in file in
   let player1 = Player.{ score = 0; position = position ci } in
   let player2 = Player.{ score = 0; position = position ci } in
-  match part with
-  | 1 -> part_1 player1 player2
-  | 2 -> part_2 player1 player2
-  | _ -> ()
+  match part with 1 -> part_1 player1 player2 | _ -> part_2 player1 player2

@@ -243,7 +243,7 @@ let parse file =
         | _ -> (scanner, set, map))
     (0, CS.empty, IM.empty) file
 
-let run file =
+let run part file =
   let scanner, set, map = parse file in
   let map = IM.add scanner set map in
   let map' = IM.map (fun s -> CS.elements s |> all_distances) map in
@@ -260,17 +260,20 @@ let run file =
       []
       (IM.bindings map' (* |> List.map (fun (_, a) -> a) *))
   in
-  let rec all_manhattan acc = function
-    | d1 :: tl ->
-        all_manhattan
-          (List.fold_left
-             (fun acc d2 ->
-               let x, y, z = Coords.manhattan d1 d2 in
-               Int.Map.add (x + y + z) (x, y, z) acc)
-             acc tl)
-          tl
-    | [] -> acc
-  in
-  let map = all_manhattan Int.Map.empty scanners in
-  let max, _coord = Int.Map.max_binding map in
-  Format.printf "%d@." max
+  match part with
+  | 1 -> List.length scanners
+  | _ ->
+      let rec all_manhattan acc = function
+        | d1 :: tl ->
+            all_manhattan
+              (List.fold_left
+                 (fun acc d2 ->
+                   let x, y, z = Coords.manhattan d1 d2 in
+                   Int.Map.add (x + y + z) (x, y, z) acc)
+                 acc tl)
+              tl
+        | [] -> acc
+      in
+      let map = all_manhattan Int.Map.empty scanners in
+      let max, _coord = Int.Map.max_binding map in
+      max

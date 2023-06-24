@@ -11,7 +11,7 @@ let fold = function
 
 let part_1 dots folds =
   let fold = fold (List.hd folds) in
-  PS.map fold dots |> PS.cardinal |> Format.printf "%d@."
+  PS.map fold dots |> PS.cardinal
 
 let part_2 dots folds =
   let dots =
@@ -27,7 +27,7 @@ let part_2 dots folds =
   in
   for y = 0 to maxy do
     for x = 0 to maxx do
-      Format.eprintf "%c" (if PS.mem (x, y) dots then '#' else ' ')
+      Format.eprintf "%s" (if PS.mem (x, y) dots then "▮" else " ")
     done;
     Format.eprintf "@."
   done
@@ -48,4 +48,8 @@ let run part file =
       (PS.empty, []) file
   in
   let folds = List.rev folds in
-  match part with 1 -> part_1 dots folds | 2 -> part_2 dots folds | _ -> ()
+  match part with
+  | 1 -> part_1 dots folds
+  | _ ->
+      part_2 dots folds;
+      0

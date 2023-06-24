@@ -82,7 +82,7 @@ let part_1 (xtmin, xtmax) (ytmax, ytmin) =
       | Infinite x -> aux acc vx ytmin ytmax x max_int
       | INone -> get_x acc (vx + 1)
   in
-  get_x (0, 0, 0) 1 |> fun (_, _, high) -> Format.printf "%d@." high
+  get_x (0, 0, 0) 1 |> fun (_, _, high) -> high
 
 let aux acc vx ytmin ytmax xmin xmax =
   let rec aux acc vy =
@@ -111,7 +111,7 @@ let part_2 (xtmin, xtmax) (ytmax, ytmin) =
       in
       get_x acc (vx + 1)
   in
-  get_x [] 0 |> List.length |> Format.printf "%d@."
+  get_x [] 0 |> List.length
 
 let run part file =
   let ci = open_in file in
@@ -131,7 +131,7 @@ let run part file =
     | _ -> assert false
   in
   close_in ci;
-  match part with 1 -> part_1 xpair ypair | 2 -> part_2 xpair ypair | _ -> ()
+  match part with 1 -> part_1 xpair ypair | _ -> part_2 xpair ypair
 
 (* let max_high vy ytmin = *)
 (*   let rec aux (value, acc) y = *)

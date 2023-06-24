@@ -28,7 +28,7 @@ let part_1 file =
   (* Epsilon is 0xFFF... xor gamma that is also 2^(number of bits in gamma) - 1 - gamma
      2 ^ n is 1 lsl n *)
   let epsilon = (1 lsl length) - 1 - gamma in
-  Format.printf "%d@." (gamma * epsilon)
+  gamma * epsilon
 
 type acc = {
   zeros : int;
@@ -57,7 +57,6 @@ let part_2 file =
   let numbers = Parse.lines file in
   let oxygen = aux ( > ) 0 empty numbers in
   let co2 = aux ( <= ) 0 empty numbers in
-  Format.printf "%d@." (oxygen * co2)
+  oxygen * co2
 
-let run part file =
-  match part with 1 -> part_1 file | 2 -> part_2 file | _ -> ()
+let run part file = match part with 1 -> part_1 file | _ -> part_2 file

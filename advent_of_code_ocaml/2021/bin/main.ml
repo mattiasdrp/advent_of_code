@@ -28,8 +28,8 @@ let () =
   | "d12.p2" -> Day12.run 2 "resources/day12"
   | "d13.p1" -> Day13.run 1 "resources/day13"
   | "d13.p2" -> Day13.run 2 "resources/day13"
-  | "d14.p1" -> Day14.run 1 "resources/day14" 40
-  | "d14.p2" -> Day14.run 2 "resources/day14" 40
+  | "d14.p1" -> Day14.run 1 "resources/day14"
+  | "d14.p2" -> Day14.run 2 "resources/day14"
   | "d15.p1" -> Day15.run 1 "resources/day15" 1
   | "d15.p2" -> Day15.run 2 "resources/day15" 1
   | "d16.p1" -> Day16.run 1 "resources/day16"
@@ -49,7 +49,5 @@ let () =
   | "d23.p1" -> Day23.run 1 "resources/day23"
   | "d23.p2" -> Day23.run 2 "resources/day23"
   | "d24.p1" -> Day24.run "resources/day24"
-  | "d24.p2" -> Day24.run "resources/day24"
   | "d25.p1" -> Day25.run "resources/day25"
-  | "d25.p2" -> Day25.run "resources/day25"
   | str -> Format.eprintf "%s part not found" str

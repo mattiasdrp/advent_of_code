@@ -66,11 +66,11 @@ end
 let part_1 blink enhancement matrix =
   let matrix = Image.enhance ~blink 1 enhancement matrix in
   let matrix = Image.enhance ~blink 2 enhancement matrix in
-  Format.printf "%d@." (Image.lit matrix)
+  Image.lit matrix
 
 let part_2 blink enhancement matrix =
   let rec aux i matrix =
-    if i > 50 then Format.printf "%d@." (Image.lit matrix)
+    if i > 50 then Image.lit matrix
     else aux (i + 1) (Image.enhance ~blink i enhancement matrix)
   in
   aux 1 matrix
@@ -100,5 +100,4 @@ let run part file =
   let matrix = aux_parse [] in
   match part with
   | 1 -> part_1 blink enhancement matrix
-  | 2 -> part_2 blink enhancement matrix
-  | _ -> ()
+  | _ -> part_2 blink enhancement matrix

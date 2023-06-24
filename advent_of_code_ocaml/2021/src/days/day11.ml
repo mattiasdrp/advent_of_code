@@ -49,7 +49,7 @@ let step a =
   in
   aux 1 0
 
-let part_1 a = step a |> Format.printf "%d@."
+let part_1 a = step a
 
 let step a =
   let rec aux i =
@@ -70,7 +70,7 @@ let step a =
   in
   aux 1
 
-let part_2 a = step a |> Format.printf "%d@."
+let part_2 a = step a
 
 let run part file =
   let a =
@@ -79,4 +79,4 @@ let run part file =
       [] file
     |> List.rev |> Array.of_list
   in
-  match part with 1 -> part_1 a | 2 -> part_2 a | _ -> ()
+  match part with 1 -> part_1 a | _ -> part_2 a

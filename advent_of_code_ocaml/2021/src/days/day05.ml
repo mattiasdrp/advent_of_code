@@ -49,7 +49,6 @@ let part_1 file =
     Int.PairMap.empty file
   |> fun m ->
   Int.PairMap.fold (fun _ cpt acc -> if cpt > 1 then acc + 1 else acc) m 0
-  |> Format.printf "%d@."
 
 let add_all_interval x1 x2 incrx cmpx y1 y2 incry cmpy acc =
   let rec aux x y acc =
@@ -80,7 +79,5 @@ let part_2 file =
     Int.PairMap.empty file
   |> fun m ->
   Int.PairMap.fold (fun _ cpt acc -> if cpt > 1 then acc + 1 else acc) m 0
-  |> Format.printf "%d@.\n"
 
-let run part file =
-  match part with 1 -> ignore (part_1 file) | 2 -> part_2 file | _ -> ()
+let run part file = match part with 1 -> part_1 file | _ -> part_2 file

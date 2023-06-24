@@ -10,7 +10,7 @@ let part_1 file =
       (0, -1) file
     (* Starting at -1 because we need to discount the first measurement *)
   in
-  Format.printf "%d@." cpt
+  cpt
 
 let part_2 file =
   let _, cpt =
@@ -27,7 +27,7 @@ let part_2 file =
       file
     (* Starting at 0 because we start at index 3 so fourth number *)
   in
-  Format.printf "%d@." cpt
+  cpt
 
 let generate file i =
   let co = open_out file in
@@ -37,5 +37,4 @@ let generate file i =
   done;
   close_out co
 
-let run part file =
-  match part with 1 -> part_1 file | 2 -> part_2 file | i -> generate file i
+let run part file = match part with 1 -> part_1 file | _ -> part_2 file

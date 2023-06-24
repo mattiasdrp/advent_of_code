@@ -49,10 +49,9 @@ let part_1 file =
         (Tree.add v tree, v :: list))
       (Tree.empty, []) file
   in
-  (match Tree.mediane tree with
+  match Tree.mediane tree with
   | Some mediane -> List.fold_left (fun acc v -> acc + abs (v - mediane)) 0 list
-  | None -> assert false)
-  |> Format.printf "%d@."
+  | None -> assert false
 
 (* Part 2 *)
 
@@ -73,7 +72,6 @@ let part_2 file =
   in
   let mean1 = acc / cpt in
   let mean2 = int_of_float (ceil (float acc /. float cpt)) in
-  min (total mean1 list) (total mean2 list) |> Format.printf "%d@."
+  min (total mean1 list) (total mean2 list)
 
-let run part file =
-  match part with 1 -> part_1 file | 2 -> part_2 file | _ -> ()
+let run part file = match part with 1 -> part_1 file | _ -> part_2 file

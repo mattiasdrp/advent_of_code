@@ -40,8 +40,4 @@ let part_2 file =
   in
   hor * depth
 
-let run part file =
-  match part with
-  | 1 -> Format.printf "%d@." (part_1 file)
-  | 2 -> Format.printf "%d@." (part_2 file)
-  | _ -> ()
+let run part file = match part with 1 -> part_1 file | _ -> part_2 file
