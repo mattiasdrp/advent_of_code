@@ -143,29 +143,30 @@ let greedy_shortest_path matrix =
   in
   loop ()
 
-let part_1 file algo =
-  let matrix =
-    let _, matrix =
-      Parse.fold_lines
-        (fun (i, matrix) s ->
-          let line =
-            String.to_arrayi
-              (fun j c ->
-                Cell.
-                  {
-                    i;
-                    j;
-                    risk = Char.to_digit c;
-                    distance = 50;
-                    visited = false;
-                  })
-              s
-          in
-          (i + 1, line :: matrix))
-        (0, []) file
-    in
-    matrix |> List.rev |> Array.of_list
+let init_matrix file =
+  let _, matrix =
+    Parse.fold_lines
+      (fun (i, matrix) s ->
+        let line =
+          String.to_arrayi
+            (fun j c ->
+              Cell.
+                {
+                  i;
+                  j;
+                  risk = Char.to_digit c;
+                  distance = max_int / 2;
+                  visited = false;
+                })
+            s
+        in
+        (i + 1, line :: matrix))
+      (0, []) file
   in
+  matrix |> List.rev |> Array.of_list
+
+let part_1 file algo =
+  let matrix = init_matrix file in
   match algo with
   | 1 ->
       Format.eprintf "Greedy Algorithm@.";
@@ -176,28 +177,7 @@ let part_1 file algo =
 
 let part_2 file algo =
   let open Cell in
-  let matrix =
-    let _, matrix =
-      Parse.fold_lines
-        (fun (i, matrix) s ->
-          let line =
-            String.to_arrayi
-              (fun j c ->
-                Cell.
-                  {
-                    i;
-                    j;
-                    risk = Char.to_digit c;
-                    distance = max_int / 2;
-                    visited = false;
-                  })
-              s
-          in
-          (i + 1, line :: matrix))
-        (0, []) file
-    in
-    matrix |> List.rev |> Array.of_list
-  in
+  let matrix = init_matrix file in
   let width, height = Array.Matrix.width_height matrix in
   let matrix =
     Array.init (5 * width) (fun i ->

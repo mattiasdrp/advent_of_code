@@ -229,7 +229,7 @@ let () =
 let () =
   Test.register ~__FILE__ ~title:"d15.p1" ~tags:[ "d15"; "p1"; "fast" ]
   @@ fun () ->
-  Check.((Day15.run 1 "resources/day15" 1 = 50) int)
+  Check.((Day15.run 1 "resources/day15" 1 = 441) int)
     ~error_msg:"expected Day15.run 1 input = %R, got %L";
   Log.info "Day 15, part 1, is correct.";
   unit
