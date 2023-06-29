@@ -111,7 +111,7 @@ let init_map file =
     map with
     width = width - 2;
     height = height - 2;
-    lcm = Int.Decimal.lcm (width - 2) (height - 2);
+    lcm = 0 (* Int.Decimal.lcm (width - 2) (height - 2); *);
   }
 
 let bfs start goal minute map =
