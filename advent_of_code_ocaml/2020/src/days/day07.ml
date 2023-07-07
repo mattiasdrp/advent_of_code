@@ -42,8 +42,7 @@ let parse file =
   in
   aux_parse String.Map.empty
 
-let part_1 file =
-  parse file |> nb_containers "shiny gold" |> Format.printf "%d@."
+let part_1 file = parse file |> nb_containers "shiny gold"
 
 let count_bags s map =
   let rec aux bags acc =
@@ -55,7 +54,5 @@ let count_bags s map =
   in
   aux (String.Map.find s map) 0
 
-let part_2 file = parse file |> count_bags "shiny gold" |> Format.printf "%d@."
-
-let run part file =
-  match part with 1 -> part_1 file | 2 -> part_2 file | _ -> ()
+let part_2 file = parse file |> count_bags "shiny gold"
+let run part file = match part with 1 -> part_1 file | _ -> part_2 file

@@ -15,8 +15,9 @@ let part_1 file =
       (fun i ->
         let res = 2020 - i in
         if Int.Set.mem res set then raise (Found (i * res)))
-      set
-  with Found i -> Format.printf "%d@." i
+      set;
+    assert false
+  with Found i -> i
 
 let part_2 file =
   let ci = open_in file in
@@ -35,8 +36,8 @@ let part_2 file =
             let res = res - j in
             if Int.Set.mem res set then raise (Found (i * j * res)))
           set)
-      set
-  with Found i -> Format.printf "%d@." i
+      set;
+    assert false
+  with Found i -> i
 
-let run part file =
-  match part with 1 -> part_1 file | 2 -> part_2 file | _ -> ()
+let run part file = match part with 1 -> part_1 file | _ -> part_2 file

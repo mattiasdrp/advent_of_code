@@ -69,8 +69,7 @@ let part_1 file =
         aux_parse (Ferry.move ferry dir value)
     | exception End_of_file -> ferry
   in
-  aux_parse { dir = Dir.E; x = 0; y = 0 }
-  |> Ferry.manhattan |> Format.printf "%d@."
+  aux_parse { dir = Dir.E; x = 0; y = 0 } |> Ferry.manhattan
 
 module FerWay = struct
   type t = { x : int; y : int }
@@ -112,8 +111,6 @@ let part_2 file =
         aux_parse (FerWay.move ferry waypoint dir value)
     | exception End_of_file -> ferry
   in
-  aux_parse FerWay.({ x = 0; y = 0 }, { x = 10; y = 1 })
-  |> FerWay.manhattan |> Format.printf "%d@."
+  aux_parse FerWay.({ x = 0; y = 0 }, { x = 10; y = 1 }) |> FerWay.manhattan
 
-let run part file =
-  match part with 1 -> part_1 file | 2 -> part_2 file | _ -> ()
+let run part file = match part with 1 -> part_1 file | _ -> part_2 file

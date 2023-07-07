@@ -28,11 +28,10 @@ let parse file =
 
 let part_1 file =
   let l, last = parse file in
-  memorize 2020 l last |> Format.printf "%d@."
+  memorize 2020 l last
 
 let part_2 file =
   let l, last = parse file in
-  memorize 30_000_000 l last |> Format.printf "%d@."
+  memorize 30_000_000 l last
 
-let run part file =
-  match part with 1 -> part_1 file | 2 -> part_2 file | _ -> ()
+let run part file = match part with 1 -> part_1 file | _ -> part_2 file

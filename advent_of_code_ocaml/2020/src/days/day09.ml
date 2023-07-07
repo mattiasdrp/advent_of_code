@@ -65,7 +65,7 @@ let get_invalid preamble file =
   let preamble = aux_preamble 0 M.empty in
   aux_parse preamble
 
-let part_1 preamble file = get_invalid preamble file |> Format.printf "%d@."
+let part_1 preamble file = get_invalid preamble file
 
 exception Found of int * int
 
@@ -88,10 +88,7 @@ let part_2 preamble file =
     | s -> aux_parse (sum (int_of_string s) invalid acc)
     | exception End_of_file -> assert false
   in
-  try ignore (aux_parse []) with Found (i, j) -> Format.printf "%d@." (i + j)
+  try aux_parse [] with Found (i, j) -> i + j
 
 let run part file preamble =
-  match part with
-  | 1 -> part_1 preamble file
-  | 2 -> part_2 preamble file
-  | _ -> ()
+  match part with 1 -> part_1 preamble file | _ -> part_2 preamble file

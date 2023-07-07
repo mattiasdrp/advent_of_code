@@ -26,7 +26,7 @@ let part_1 file =
     | s -> aux_parse (passport ^ " " ^ s) acc
     | exception End_of_file -> acc + validity passport
   in
-  aux_parse "" 0 |> Format.printf "%d@."
+  aux_parse "" 0
 
 let byr y =
   let y = int_of_string y in
@@ -111,7 +111,6 @@ let part_2 file =
     | s -> aux_parse (passport ^ " " ^ s) acc
     | exception End_of_file -> acc + validity passport
   in
-  aux_parse "" 0 |> Format.printf "%d@."
+  aux_parse "" 0
 
-let run part file =
-  match part with 1 -> part_1 file | 2 -> part_2 file | _ -> ()
+let run part file = match part with 1 -> part_1 file | _ -> part_2 file

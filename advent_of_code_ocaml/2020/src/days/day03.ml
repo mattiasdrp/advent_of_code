@@ -28,13 +28,11 @@ let down area (ri, dj) =
 
 let part_1 file =
   let area = area file in
-  down area (1, 3) |> Format.printf "%d@."
+  down area (1, 3)
 
 let part_2 file =
   let area = area file in
   let down = down area in
   down (1, 1) * down (1, 3) * down (1, 5) * down (1, 7) * down (2, 1)
-  |> Format.printf "%d@."
 
-let run part file =
-  match part with 1 -> part_1 file | 2 -> part_2 file | _ -> ()
+let run part file = match part with 1 -> part_1 file | _ -> part_2 file

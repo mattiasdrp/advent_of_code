@@ -97,7 +97,6 @@ let part_1 file =
     | exception End_of_file -> graph
   in
   aux_parse 0 Graph.empty |> Graph.cycles 6 |> Graph.total_actives
-  |> Format.printf "%d@."
 
 module Point4D = struct
   type t = { x : int; y : int; z : int; w : int }
@@ -144,7 +143,5 @@ let part_2 file =
     | exception End_of_file -> graph
   in
   aux_parse 0 Graph.empty |> Graph.cycles 6 |> Graph.total_actives
-  |> Format.printf "%d@."
 
-let run part file =
-  match part with 1 -> part_1 file | 2 -> part_2 file | _ -> ()
+let run part file = match part with 1 -> part_1 file | _ -> part_2 file

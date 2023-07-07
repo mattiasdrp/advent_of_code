@@ -39,7 +39,7 @@ let part_1 file =
     | exception End_of_file ->
         Int.Map.fold (fun _ v acc -> acc + Int.Binary.to_dec v) acc 0
   in
-  aux_parse Mask.empty Int.Map.empty |> Format.printf "%d@."
+  aux_parse Mask.empty Int.Map.empty
 
 module Mask2 = struct
   type action = Overwrite | Split
@@ -103,7 +103,6 @@ let part_2 file =
             acc + v)
           acc 0
   in
-  aux_parse Mask2.empty Int.Map.empty |> Format.printf "%d@."
+  aux_parse Mask2.empty Int.Map.empty
 
-let run part file =
-  match part with 1 -> part_1 file | 2 -> part_2 file | _ -> ()
+let run part file = match part with 1 -> part_1 file | _ -> part_2 file

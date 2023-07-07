@@ -21,7 +21,7 @@ let part_1 file =
         aux_parse (max acc ((row * 8) + col))
     | exception End_of_file -> acc
   in
-  aux_parse 0 |> Format.printf "%d@."
+  aux_parse 0
 
 exception Found of int
 
@@ -36,12 +36,10 @@ let part_2 file =
   in
   let set = aux_parse Int.Set.empty in
   try
-    ignore
-      (Int.Set.fold
-         (fun e prev -> if e = prev + 1 then e else raise (Found (e - 1)))
-         set
-         (Int.Set.min_elt set - 1))
-  with Found i -> Format.printf "%d@." i
+    Int.Set.fold
+      (fun e prev -> if e = prev + 1 then e else raise (Found (e - 1)))
+      set
+      (Int.Set.min_elt set - 1)
+  with Found i -> i
 
-let run part file =
-  match part with 1 -> part_1 file | 2 -> part_2 file | _ -> ()
+let run part file = match part with 1 -> part_1 file | _ -> part_2 file

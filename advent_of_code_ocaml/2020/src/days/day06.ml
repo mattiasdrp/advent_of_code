@@ -8,7 +8,7 @@ let part_1 file =
     | s -> aux_parse (String.fold (fun set c -> Char.Set.add c set) set s) acc
     | exception End_of_file -> acc + Char.Set.cardinal set
   in
-  aux_parse Char.Set.empty 0 |> Format.printf "%d@."
+  aux_parse Char.Set.empty 0
 
 let part_2 file =
   let ci = open_in file in
@@ -23,7 +23,6 @@ let part_2 file =
         aux_parse false set acc
     | exception End_of_file -> acc + Char.Set.cardinal set
   in
-  aux_parse true Char.Set.empty 0 |> Format.printf "%d@."
+  aux_parse true Char.Set.empty 0
 
-let run part file =
-  match part with 1 -> part_1 file | 2 -> part_2 file | _ -> ()
+let run part file = match part with 1 -> part_1 file | _ -> part_2 file

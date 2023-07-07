@@ -69,13 +69,10 @@ let loop nghbrs_seq occupied matrix =
   in
   aux matrix
 
-let part_1 file =
-  ferry file |> loop Array.Matrix.moore_neighbourhood 4 |> Format.eprintf "%d@."
+let part_1 file = ferry file |> loop Array.Matrix.moore_neighbourhood 4
 
 let part_2 file =
   ferry file
   |> loop (Array.Matrix.queen_move (fun m i j -> m.(i).(j) = Cell.Floor)) 5
-  |> Format.eprintf "%d@."
 
-let run part file =
-  match part with 1 -> part_1 file | 2 -> part_2 file | _ -> ()
+let run part file = match part with 1 -> part_1 file | _ -> part_2 file

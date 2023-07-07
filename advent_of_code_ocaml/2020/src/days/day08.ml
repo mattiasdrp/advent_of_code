@@ -39,7 +39,7 @@ let parse file =
 
 let part_1 file =
   let prog = parse file |> List.rev |> Array.of_list in
-  compute prog |> Format.printf "%d@."
+  compute prog
 
 exception Result of int
 
@@ -65,7 +65,6 @@ let compute_switch prog =
 
 let part_2 file =
   let prog = parse file |> List.rev |> Array.of_list in
-  compute_switch prog |> Format.printf "%d@."
+  compute_switch prog
 
-let run part file =
-  match part with 1 -> part_1 file | 2 -> part_2 file | _ -> ()
+let run part file = match part with 1 -> part_1 file | _ -> part_2 file

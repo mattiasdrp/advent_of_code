@@ -25,7 +25,7 @@ let part_1 file =
         Format.eprintf "%d, %d@." ones threes;
         ones * threes
   in
-  aux (0, 0) (parse file) |> Format.printf "%d@."
+  aux (0, 0) (parse file)
 
 let part_2 file =
   let tbl = Hashtbl.create 32 in
@@ -53,7 +53,6 @@ let part_2 file =
         Hashtbl.add tbl l res;
         res
   in
-  aux (parse file) |> Format.printf "%d@."
+  aux (parse file)
 
-let run part file =
-  match part with 1 -> part_1 file | 2 -> part_2 file | _ -> ()
+let run part file = match part with 1 -> part_1 file | _ -> part_2 file

@@ -111,7 +111,7 @@ let init_map file =
     map with
     width = width - 2;
     height = height - 2;
-    lcm = 0 (* Int.Decimal.lcm (width - 2) (height - 2); *);
+    lcm = Int.Decimal.lcm (width - 2) (height - 2);
   }
 
 let bfs start goal minute map =
@@ -172,7 +172,6 @@ let bfs start goal minute map =
 
 let part_1 file =
   let map = init_map file in
-  Format.eprintf "%a@." Map.pp map;
   let res = bfs (0, 1) (map.Map.width, map.Map.height + 1) 0 map in
   res
 
