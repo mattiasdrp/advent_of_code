@@ -53,14 +53,10 @@ let eval_postfix cl =
   |> List.hd
 
 let part_2 file =
-  let ci = open_in file in
-  let rec aux_parse acc =
-    match input_line ci with
-    | s ->
-        let res = infix_to_postfix s |> eval_postfix in
-        aux_parse (res + acc)
-    | exception End_of_file -> acc
-  in
-  aux_parse 0
+  Parse.fold_lines
+    (fun acc s ->
+      let res = infix_to_postfix s |> eval_postfix in
+      res + acc)
+    0 file
 
 let run part file = match part with 1 -> part_1 file | _ -> part_2 file
