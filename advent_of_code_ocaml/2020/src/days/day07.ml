@@ -14,33 +14,29 @@ let nb_containers s map =
     map 0
 
 let parse file =
-  let ci = open_in file in
   (* light red bags contain 1 bright white bag, 2 muted yellow bags. *)
   let re = Str.regexp {|\([a-z ]+\) bags contain \([0-9a-z, ]+\).|} in
   (* 1 bright white bag *)
   let re_bag = Str.regexp {| *\([0-9]+\) \([a-z ]+\) bags?|} in
-  let rec aux_parse acc_map =
-    match input_line ci with
-    | s ->
-        if Str.string_match re s 0 then
-          let container = Str.matched_group 1 s in
-          let contains = Str.matched_group 2 s in
-          let map =
-            List.fold_left
-              (fun map bag ->
-                if Str.string_match re_bag bag 0 then
-                  String.Map.add (Str.matched_group 2 bag)
-                    (int_of_string (Str.matched_group 1 bag))
-                    map
-                else map)
-              String.Map.empty
-              (String.split_on_char ',' contains)
-          in
-          aux_parse (String.Map.add container map acc_map)
-        else failwith "Wrong regexp, should not happen"
-    | exception End_of_file -> acc_map
-  in
-  aux_parse String.Map.empty
+  Parse.fold_lines
+    (fun acc_map line ->
+      if Str.string_match re line 0 then
+        let container = Str.matched_group 1 line in
+        let contains = Str.matched_group 2 line in
+        let map =
+          List.fold_left
+            (fun map bag ->
+              if Str.string_match re_bag bag 0 then
+                String.Map.add (Str.matched_group 2 bag)
+                  (int_of_string (Str.matched_group 1 bag))
+                  map
+              else map)
+            String.Map.empty
+            (String.split_on_char ',' contains)
+        in
+        String.Map.add container map acc_map
+      else failwith "Wrong regexp, should not happen")
+    String.Map.empty file
 
 let part_1 file = parse file |> nb_containers "shiny gold"
 

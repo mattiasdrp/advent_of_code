@@ -1,28 +1,30 @@
 open Mdrp_lib
 
 let part_1 file =
-  let ci = open_in file in
-  let rec aux_parse set acc =
-    match input_line ci with
-    | "" -> aux_parse Char.Set.empty (acc + Char.Set.cardinal set)
-    | s -> aux_parse (String.fold (fun set c -> Char.Set.add c set) set s) acc
-    | exception End_of_file -> acc + Char.Set.cardinal set
+  let set, acc =
+    Parse.fold_lines
+      (fun (set, acc) line ->
+        match line with
+        | "" -> (Char.Set.empty, acc + Char.Set.cardinal set)
+        | s -> (String.fold (fun set c -> Char.Set.add c set) set s, acc))
+      (Char.Set.empty, 0) file
   in
-  aux_parse Char.Set.empty 0
+  acc + Char.Set.cardinal set
 
 let part_2 file =
-  let ci = open_in file in
-  let rec aux_parse first set acc =
-    match input_line ci with
-    | "" -> aux_parse true Char.Set.empty (acc + Char.Set.cardinal set)
-    | s ->
-        let set =
-          if first then Char.Set.of_list (String.to_list s)
-          else Char.Set.inter set (Char.Set.of_list (String.to_list s))
-        in
-        aux_parse false set acc
-    | exception End_of_file -> acc + Char.Set.cardinal set
+  let _, set, acc =
+    Parse.fold_lines
+      (fun (first, set, acc) line ->
+        match line with
+        | "" -> (true, Char.Set.empty, acc + Char.Set.cardinal set)
+        | s ->
+            let set =
+              if first then Char.Set.of_list (String.to_list s)
+              else Char.Set.inter set (Char.Set.of_list (String.to_list s))
+            in
+            (false, set, acc))
+      (true, Char.Set.empty, 0) file
   in
-  aux_parse true Char.Set.empty 0
+  acc + Char.Set.cardinal set
 
 let run part file = match part with 1 -> part_1 file | _ -> part_2 file

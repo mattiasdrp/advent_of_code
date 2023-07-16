@@ -33,7 +33,9 @@ let parse file =
           assert false)
     | exception End_of_file -> (fields, max_value, tickets, ticket)
   in
-  aux_parse false [] 0 [] []
+  let res = aux_parse false [] 0 [] [] in
+  close_in ci;
+  res
 
 let part_1 file =
   let fields, max_value, tickets, _ = parse file in
@@ -166,6 +168,7 @@ let part_2 file =
   in
   let dict_fields = Array.init (Array.length ticket) (fun _ -> set_fields) in
   intersect ci dict_fields dict_values;
+  close_in ci;
   Array.fold_lefti
     (fun i acc set ->
       match String.sub (String.Set.choose set) 0 9 with

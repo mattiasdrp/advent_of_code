@@ -15,6 +15,7 @@ let part_1 file =
         if res < earliest then (id, res) else (ide, earliest))
       (0, max_int) busses
   in
+  close_in ci;
   (earliest - depart) * id
 
 let part_2 file =
@@ -29,6 +30,7 @@ let part_2 file =
          ([], 0)
     |> fst |> List.rev
   in
+  close_in ci;
   Int.Decimal.Modular_Arithmetic.chinese_remainder busses
 
 let run part file = match part with 1 -> part_1 file | _ -> part_2 file

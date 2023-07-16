@@ -23,6 +23,7 @@ let parse file =
   match input_line ci with
   | s ->
       let l = String.split_on_char ',' s |> List.map int_of_string in
+      close_in ci;
       (l, 0)
   | exception End_of_file -> assert false
 

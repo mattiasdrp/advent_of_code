@@ -13,28 +13,22 @@ let parse s =
     s
 
 let part_1 file =
-  let ci = open_in file in
-  let rec aux_parse acc =
-    match input_line ci with
-    | s ->
-        let (_, row), (_, col) = parse s in
-        aux_parse (max acc ((row * 8) + col))
-    | exception End_of_file -> acc
-  in
-  aux_parse 0
+  Parse.fold_lines
+    (fun acc line ->
+      let (_, row), (_, col) = parse line in
+      max acc ((row * 8) + col))
+    0 file
 
 exception Found of int
 
 let part_2 file =
-  let ci = open_in file in
-  let rec aux_parse acc =
-    match input_line ci with
-    | s ->
-        let (_, row), (_, col) = parse s in
-        aux_parse (Int.Set.add ((row * 8) + col) acc)
-    | exception End_of_file -> acc
+  let set =
+    Parse.fold_lines
+      (fun acc line ->
+        let (_, row), (_, col) = parse line in
+        Int.Set.add ((row * 8) + col) acc)
+      Int.Set.empty file
   in
-  let set = aux_parse Int.Set.empty in
   try
     Int.Set.fold
       (fun e prev -> if e = prev + 1 then e else raise (Found (e - 1)))

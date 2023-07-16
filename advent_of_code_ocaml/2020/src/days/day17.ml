@@ -81,22 +81,18 @@ end
 
 let part_1 file =
   let module Graph = Graph (Point3D) in
-  let ci = open_in file in
-
-  let rec aux_parse x graph =
-    match input_line ci with
-    | s ->
-        aux_parse (x + 1)
-          (String.foldi
-             (fun y acc c ->
-               Graph.add
-                 Point3D.{ x; y; z = 0 }
-                 (match c with '.' -> false | '#' -> true | _ -> assert false)
-                 acc)
-             graph s)
-    | exception End_of_file -> graph
-  in
-  aux_parse 0 Graph.empty |> Graph.cycles 6 |> Graph.total_actives
+  Parse.fold_lines
+    (fun (x, graph) line ->
+      ( x + 1,
+        String.foldi
+          (fun y acc c ->
+            Graph.add
+              Point3D.{ x; y; z = 0 }
+              (match c with '.' -> false | '#' -> true | _ -> assert false)
+              acc)
+          graph line ))
+    (0, Graph.empty) file
+  |> snd |> Graph.cycles 6 |> Graph.total_actives
 
 module Point4D = struct
   type t = { x : int; y : int; z : int; w : int }
@@ -127,21 +123,17 @@ end
 
 let part_2 file =
   let module Graph = Graph (Point4D) in
-  let ci = open_in file in
-
-  let rec aux_parse x graph =
-    match input_line ci with
-    | s ->
-        aux_parse (x + 1)
-          (String.foldi
-             (fun y acc c ->
-               Graph.add
-                 Point4D.{ x; y; z = 0; w = 0 }
-                 (match c with '.' -> false | '#' -> true | _ -> assert false)
-                 acc)
-             graph s)
-    | exception End_of_file -> graph
-  in
-  aux_parse 0 Graph.empty |> Graph.cycles 6 |> Graph.total_actives
+  Parse.fold_lines
+    (fun (x, graph) line ->
+      ( x + 1,
+        String.foldi
+          (fun y acc c ->
+            Graph.add
+              Point4D.{ x; y; z = 0; w = 0 }
+              (match c with '.' -> false | '#' -> true | _ -> assert false)
+              acc)
+          graph line ))
+    (0, Graph.empty) file
+  |> snd |> Graph.cycles 6 |> Graph.total_actives
 
 let run part file = match part with 1 -> part_1 file | _ -> part_2 file

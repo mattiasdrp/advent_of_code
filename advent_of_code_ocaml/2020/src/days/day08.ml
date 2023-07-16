@@ -23,19 +23,15 @@ let compute prog =
   aux 0 0 Int.Set.empty
 
 let parse file =
-  let ci = open_in file in
-  let rec aux_parse acc =
-    match input_line ci with
-    | s ->
-        let inst =
-          match String.split_on_char ' ' s with
-          | [ op; value ] -> { inst = (of_string op, int_of_string value) }
-          | _ -> assert false
-        in
-        aux_parse (inst :: acc)
-    | exception End_of_file -> acc
-  in
-  aux_parse []
+  Parse.fold_lines
+    (fun acc line ->
+      let inst =
+        match String.split_on_char ' ' line with
+        | [ op; value ] -> { inst = (of_string op, int_of_string value) }
+        | _ -> assert false
+      in
+      inst :: acc)
+    [] file
 
 let part_1 file =
   let prog = parse file |> List.rev |> Array.of_list in

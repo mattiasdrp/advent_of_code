@@ -2,14 +2,13 @@ open Mdrp_lib
 
 exception Found of int
 
+let parse file =
+  Parse.fold_lines
+    (fun acc line -> Int.Set.add (int_of_string line) acc)
+    Int.Set.empty file
+
 let part_1 file =
-  let ci = open_in file in
-  let rec aux_parse acc =
-    match input_line ci with
-    | s -> aux_parse (Int.Set.add (int_of_string s) acc)
-    | exception End_of_file -> acc
-  in
-  let set = aux_parse Int.Set.empty in
+  let set = parse file in
   try
     Int.Set.iter
       (fun i ->
@@ -20,13 +19,7 @@ let part_1 file =
   with Found i -> i
 
 let part_2 file =
-  let ci = open_in file in
-  let rec aux_parse acc =
-    match input_line ci with
-    | s -> aux_parse (Int.Set.add (int_of_string s) acc)
-    | exception End_of_file -> acc
-  in
-  let set = aux_parse Int.Set.empty in
+  let set = parse file in
   try
     Int.Set.iter
       (fun i ->

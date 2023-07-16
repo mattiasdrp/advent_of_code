@@ -60,16 +60,14 @@ module Ferry = struct
 end
 
 let part_1 file =
-  let ci = open_in file in
-  let rec aux_parse ferry =
-    match input_line ci with
-    | s ->
-        let dir = s.[0] |> Dir.of_char in
-        let value = String.sub s 1 (String.length s - 1) |> int_of_string in
-        aux_parse (Ferry.move ferry dir value)
-    | exception End_of_file -> ferry
-  in
-  aux_parse { dir = Dir.E; x = 0; y = 0 } |> Ferry.manhattan
+  Parse.fold_lines
+    (fun ferry line ->
+      let dir = line.[0] |> Dir.of_char in
+      let value = String.sub line 1 (String.length line - 1) |> int_of_string in
+      Ferry.move ferry dir value)
+    { dir = Dir.E; x = 0; y = 0 }
+    file
+  |> Ferry.manhattan
 
 module FerWay = struct
   type t = { x : int; y : int }
@@ -102,15 +100,13 @@ module FerWay = struct
 end
 
 let part_2 file =
-  let ci = open_in file in
-  let rec aux_parse (ferry, waypoint) =
-    match input_line ci with
-    | s ->
-        let dir = s.[0] |> Dir.of_char in
-        let value = String.sub s 1 (String.length s - 1) |> int_of_string in
-        aux_parse (FerWay.move ferry waypoint dir value)
-    | exception End_of_file -> ferry
-  in
-  aux_parse FerWay.({ x = 0; y = 0 }, { x = 10; y = 1 }) |> FerWay.manhattan
+  Parse.fold_lines
+    (fun (ferry, waypoint) line ->
+      let dir = line.[0] |> Dir.of_char in
+      let value = String.sub line 1 (String.length line - 1) |> int_of_string in
+      FerWay.move ferry waypoint dir value)
+    FerWay.({ x = 0; y = 0 }, { x = 10; y = 1 })
+    file
+  |> fst |> FerWay.manhattan
 
 let run part file = match part with 1 -> part_1 file | _ -> part_2 file

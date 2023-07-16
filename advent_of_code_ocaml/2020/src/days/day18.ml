@@ -54,8 +54,8 @@ let eval_postfix cl =
 
 let part_2 file =
   Parse.fold_lines
-    (fun acc s ->
-      let res = infix_to_postfix s |> eval_postfix in
+    (fun acc line ->
+      let res = infix_to_postfix line |> eval_postfix in
       res + acc)
     0 file
 

@@ -19,14 +19,15 @@ let validity passport =
   if String.Set.subset remaining cid then 1 else 0
 
 let part_1 file =
-  let ci = open_in file in
-  let rec aux_parse passport acc =
-    match input_line ci with
-    | "" -> aux_parse "" (acc + validity passport)
-    | s -> aux_parse (passport ^ " " ^ s) acc
-    | exception End_of_file -> acc + validity passport
+  let passport, acc =
+    Parse.fold_lines
+      (fun (passport, acc) line ->
+        match line with
+        | "" -> ("", acc + validity passport)
+        | s -> (passport ^ " " ^ s, acc))
+      ("", 0) file
   in
-  aux_parse "" 0
+  acc + validity passport
 
 let byr y =
   let y = int_of_string y in
@@ -104,13 +105,14 @@ let validity passport =
   else 0
 
 let part_2 file =
-  let ci = open_in file in
-  let rec aux_parse passport acc =
-    match input_line ci with
-    | "" -> aux_parse "" (acc + validity passport)
-    | s -> aux_parse (passport ^ " " ^ s) acc
-    | exception End_of_file -> acc + validity passport
+  let passport, acc =
+    Parse.fold_lines
+      (fun (passport, acc) line ->
+        match line with
+        | "" -> ("", acc + validity passport)
+        | s -> (passport ^ " " ^ s, acc))
+      ("", 0) file
   in
-  aux_parse "" 0
+  acc + validity passport
 
 let run part file = match part with 1 -> part_1 file | _ -> part_2 file

@@ -18,28 +18,27 @@ module Mask = struct
 end
 
 let part_1 file =
-  let ci = open_in file in
   let re_mask = Str.regexp {|mask = \([X01]+\)|} in
   let re_mem = Str.regexp {|mem\[\([0-9]+\)\] = \([0-9]+\)|} in
-  let rec aux_parse mask acc =
-    match input_line ci with
-    | s ->
-        if Str.string_match re_mask s 0 then
-          aux_parse (Str.matched_group 1 s |> Mask.of_string) acc
+  let _, acc =
+    Parse.fold_lines
+      (fun (mask, acc) line ->
+        if Str.string_match re_mask line 0 then
+          (Str.matched_group 1 line |> Mask.of_string, acc)
         else (
-          assert (Str.string_match re_mem s 0);
+          assert (Str.string_match re_mem line 0);
 
-          aux_parse mask
-            (Int.Map.add
-               (Str.matched_group 1 s |> int_of_string)
-               (Str.matched_group 2 s |> int_of_string
-               |> Int.Binary.of_dec ~extend:36
-               |> Mask.apply mask)
-               acc))
-    | exception End_of_file ->
-        Int.Map.fold (fun _ v acc -> acc + Int.Binary.to_dec v) acc 0
+          ( mask,
+            Int.Map.add
+              (Str.matched_group 1 line |> int_of_string)
+              (Str.matched_group 2 line |> int_of_string
+              |> Int.Binary.of_dec ~extend:36
+              |> Mask.apply mask)
+              acc )))
+      (Mask.empty, Int.Map.empty)
+      file
   in
-  aux_parse Mask.empty Int.Map.empty
+  Int.Map.fold (fun _ v acc -> acc + Int.Binary.to_dec v) acc 0
 
 module Mask2 = struct
   type action = Overwrite | Split
@@ -78,31 +77,26 @@ module Mask2 = struct
 end
 
 let part_2 file =
-  let ci = open_in file in
   let re_mask = Str.regexp {|mask = \([X01]+\)|} in
   let re_mem = Str.regexp {|mem\[\([0-9]+\)\] = \([0-9]+\)|} in
-  let rec aux_parse mask acc =
-    match input_line ci with
-    | s ->
-        if Str.string_match re_mask s 0 then
-          aux_parse (Str.matched_group 1 s |> Mask2.of_string) acc
+  let _, acc =
+    Parse.fold_lines
+      (fun (mask, acc) line ->
+        if Str.string_match re_mask line 0 then
+          (Str.matched_group 1 line |> Mask2.of_string, acc)
         else (
-          assert (Str.string_match re_mem s 0);
-          let v = Str.matched_group 2 s |> int_of_string in
-          Str.matched_group 1 s |> int_of_string
-          |> Int.Binary.of_dec ~extend:36
-          |> Mask2.apply mask
-          |> List.fold_left
-               (fun acc k -> Int.Map.add (Int.Decimal.of_bin k) v acc)
-               acc
-          |> aux_parse mask)
-    | exception End_of_file ->
-        Int.Map.fold
-          (fun _k v acc ->
-            (* Format.eprintf "%d %d@." k v; *)
-            acc + v)
-          acc 0
+          assert (Str.string_match re_mem line 0);
+          let v = Str.matched_group 2 line |> int_of_string in
+          ( mask,
+            Str.matched_group 1 line |> int_of_string
+            |> Int.Binary.of_dec ~extend:36
+            |> Mask2.apply mask
+            |> List.fold_left
+                 (fun acc k -> Int.Map.add (Int.Decimal.of_bin k) v acc)
+                 acc )))
+      (Mask2.empty, Int.Map.empty)
+      file
   in
-  aux_parse Mask2.empty Int.Map.empty
+  Int.Map.fold (fun _k v acc -> acc + v) acc 0
 
 let run part file = match part with 1 -> part_1 file | _ -> part_2 file

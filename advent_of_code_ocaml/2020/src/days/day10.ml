@@ -1,15 +1,12 @@
 open Mdrp_lib
 
 let parse file =
-  let ci = open_in file in
-  let rec aux_parse acc =
-    match input_line ci with
-    | s -> aux_parse (Int.Set.add (int_of_string s) acc)
-    | exception End_of_file ->
-        Int.Set.add (Int.Set.max_elt acc + 3) acc
-        |> Int.Set.add 0 |> Int.Set.elements
+  let set =
+    Parse.fold_lines
+      (fun acc line -> Int.Set.add (int_of_string line) acc)
+      Int.Set.empty file
   in
-  aux_parse Int.Set.empty
+  Int.Set.add (Int.Set.max_elt set + 3) set |> Int.Set.add 0 |> Int.Set.elements
 
 let part_1 file =
   let rec aux (ones, threes) = function
