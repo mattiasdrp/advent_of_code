@@ -1,6 +1,3 @@
-%{ open Day19_ast %}
-
-
 %token <int> INT
 %token <char> CHAR
 %token COLON ":"
