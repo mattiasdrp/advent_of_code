@@ -339,19 +339,35 @@ let () =
   unit
 
 let () =
-  Test.register ~__FILE__ ~title:"d21.p1" ~tags:[ "d21"; "p1"; "fast" ]
+  Test.register ~__FILE__ ~title:"d22.p1" ~tags:[ "d22"; "p1"; "fast" ]
   @@ fun () ->
-  Check.((Day21.run 1 "resources/day21" = 33559) int)
-    ~error_msg:"expected Day21.run 1 input = %R, got %L";
-  Log.info "Day 21, part 1, is correct.";
+  Check.((Day22.run 1 "resources/day22" = 33559) int)
+    ~error_msg:"expected Day22.run 1 input = %R, got %L";
+  Log.info "Day 22, part 1, is correct.";
   unit
 
 let () =
-  Test.register ~__FILE__ ~title:"d21.p2" ~tags:[ "d21"; "p2"; "fast" ]
+  Test.register ~__FILE__ ~title:"d22.p2" ~tags:[ "d22"; "p2"; "fast" ]
   @@ fun () ->
-  Check.((Day21.run 2 "resources/day21" = 32789) int)
-    ~error_msg:"expected Day21.run 2 input = %R, got %L";
-  Log.info "Day 21, part 2, is correct.";
+  Check.((Day22.run 2 "resources/day22" = 32789) int)
+    ~error_msg:"expected Day22.run 2 input = %R, got %L";
+  Log.info "Day 22, part 2, is correct.";
+  unit
+
+let () =
+  Test.register ~__FILE__ ~title:"d23.p1" ~tags:[ "d23"; "p1"; "fast" ]
+  @@ fun () ->
+  Check.((Day23.run 1 "resources/day23" = 24987653) int)
+    ~error_msg:"expected Day23.run 1 input = %R, got %L";
+  Log.info "Day 23, part 1, is correct.";
+  unit
+
+let () =
+  Test.register ~__FILE__ ~title:"d23.p2" ~tags:[ "d23"; "p2"; "slow" ]
+  @@ fun () ->
+  Check.((Day23.run 2 "resources/day23" = 442938711161) int)
+    ~error_msg:"expected Day23.run 2 input = %R, got %L";
+  Log.info "Day 23, part 2, is correct.";
   unit
 
 (* CALL the main function of Tezt so that it actually runs your tests. *)
