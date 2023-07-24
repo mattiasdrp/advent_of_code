@@ -1,6 +1,3 @@
-%{ open Day19_ast %}
-
-
 %token <string> WORD
 %token COMMA ","
 %token LEFTP  "("
