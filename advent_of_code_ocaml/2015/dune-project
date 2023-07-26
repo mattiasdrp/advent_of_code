@@ -5,6 +5,8 @@
 ; Since we want to generate opam files we need to provide informations ;
 (generate_opam_files true)
 
+(using menhir 2.1)
+
 (name aoc_2015)
 (version dev)
 (authors "mattiasdrp")
