@@ -130,5 +130,21 @@ let () =
   Log.info "Day 13, part 2, is correct.";
   unit
 
+let () =
+  Test.register ~__FILE__ ~title:"d14.p1" ~tags:[ "d14"; "p1"; "fast" ]
+  @@ fun () ->
+  Check.((Day14.run 1 "resources/day14" = 2640) int)
+    ~error_msg:"expected Day14.run 1 input = %R, got %L";
+  Log.info "Day 14, part 1, is correct.";
+  unit
+
+let () =
+  Test.register ~__FILE__ ~title:"d14.p2" ~tags:[ "d14"; "p2"; "fast" ]
+  @@ fun () ->
+  Check.((Day14.run 2 "resources/day14" = 1102) int)
+    ~error_msg:"expected Day14.run 2 input = %R, got %L";
+  Log.info "Day 14, part 2, is correct.";
+  unit
+
 (* CALL the main function of Tezt so that it actually runs your tests. *)
 let () = Test.run ()
