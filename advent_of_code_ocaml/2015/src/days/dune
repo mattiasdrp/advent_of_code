@@ -2,10 +2,10 @@
  (package days))
 
 (ocamllex
-  (modules day07_lexer))
+  (modules day07_lexer day16_lexer))
 
 (menhir
-  (modules day07_parser)
+  (modules day07_parser day16_parser)
   (flags -la 2))
 
 (library
