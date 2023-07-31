@@ -19,13 +19,13 @@ module Image = struct
   let default blink step = if blink then if step mod 2 = 0 then 0 else 1 else 0
 
   let vicinity ?(blink = true) t (x, y) step =
-    let width, height = Array.Matrix.width_height t in
+    let rows, columns = Array.Matrix.rows_columns t in
     (* We need to take into account that the vicinity are the cells in the previous *)
     (* step, not the one we're working on. So (step-1) *)
     let default = default blink (step - 1) in
     let value (x, y) =
       string_of_int
-        (if x < 0 || y < 0 || x >= height || y >= width then default
+        (if x < 0 || y < 0 || x >= columns || y >= rows then default
          else t.(x).(y))
     in
     value (x - 1, y - 1)
@@ -60,7 +60,9 @@ module Image = struct
     |> augment ~blink step
 
   let lit t =
-    Array.Matrix.fold (fun acc _ _ v -> if v = 1 then acc + 1 else acc) 0 t
+    Array.Matrix.fold_lefti
+      (fun acc ~row:_ ~col:_ v -> if v = 1 then acc + 1 else acc)
+      0 t
 end
 
 let part_1 blink enhancement matrix =

@@ -33,24 +33,28 @@ let step nghbrs_seq occupied matrix =
   in
 
   let change =
-    Array.Matrix.fold
-      (fun change i j c ->
+    Array.Matrix.fold_lefti
+      (fun change ~row ~col c ->
         match c with
         | Empty ->
-            let nbrs = nghbrs_seq matrix i j in
-            if Seq.for_all (fun (i, j) -> matrix.(i).(j) <> Occupied) nbrs then (
-              matrix'.(i).(j) <- Occupied;
+            let nbrs = nghbrs_seq matrix ~row ~col in
+            if
+              Seq.for_all
+                (fun (row, col) -> matrix.(row).(col) <> Occupied)
+                nbrs
+            then (
+              matrix'.(row).(col) <- Occupied;
               true)
             else (
-              matrix'.(i).(j) <- Empty;
+              matrix'.(row).(col) <- Empty;
               change)
         | Occupied ->
-            let nbrs = nghbrs_seq matrix i j in
+            let nbrs = nghbrs_seq matrix ~row ~col in
             if less_than_occupied occupied matrix nbrs then (
-              matrix'.(i).(j) <- Occupied;
+              matrix'.(row).(col) <- Occupied;
               change)
             else (
-              matrix'.(i).(j) <- Empty;
+              matrix'.(row).(col) <- Empty;
               true)
         | Floor -> change)
       false matrix
@@ -58,8 +62,8 @@ let step nghbrs_seq occupied matrix =
   (change, matrix')
 
 let count_occupied matrix =
-  Array.Matrix.fold
-    (fun acc _ _ -> function Cell.Occupied -> acc + 1 | _ -> acc)
+  Array.Matrix.fold_lefti
+    (fun acc ~row:_ ~col:_ -> function Cell.Occupied -> acc + 1 | _ -> acc)
     0 matrix
 
 let loop nghbrs_seq occupied matrix =
@@ -69,10 +73,17 @@ let loop nghbrs_seq occupied matrix =
   in
   aux matrix
 
-let part_1 file = ferry file |> loop Array.Matrix.moore_neighbourhood 4
+let part_1 file =
+  ferry file
+  |> loop (fun m ~row ~col -> Array.Matrix.moore_neighbourhood m ~row ~col) 4
 
 let part_2 file =
   ferry file
-  |> loop (Array.Matrix.queen_move (fun m i j -> m.(i).(j) = Cell.Floor)) 5
+  |> loop
+       (fun m ~row ~col ->
+         Array.Matrix.queen_move
+           (fun m ~row ~col -> m.(row).(col) <> Cell.Floor)
+           m ~row ~col)
+       5
 
 let run part file = match part with 1 -> part_1 file | _ -> part_2 file

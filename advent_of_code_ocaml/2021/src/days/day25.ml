@@ -2,15 +2,15 @@ open Mdrp_lib
 
 module Cell = struct
   type dir = East | South
-  type t = { dir : dir; i : int; j : int }
+  type t = { dir : dir; row : int; col : int }
 
   let is_south c = c = South
   let is_east c = c = East
 
   let compare t1 t2 =
-    let c1 = Int.compare t1.i t2.i in
+    let c1 = Int.compare t1.row t2.row in
     if c1 = 0 then
-      let c2 = Int.compare t1.j t2.j in
+      let c2 = Int.compare t1.col t2.col in
       if c2 = 0 then Stdlib.compare t1.dir t2.dir else c2
     else c1
 
@@ -20,26 +20,26 @@ module Cell = struct
   let pp_det ppf c =
     Format.fprintf ppf "{%s;%d;%d}"
       (match c.dir with East -> ">" | South -> "v")
-      c.i c.j
+      c.row c.col
 end
 
 module CSet = Set.Make (Cell)
 
 module Grid = struct
   type content = Cell of Cell.t | Empty
-  type t = { grid : content array array; width : int; height : int }
+  type t = { grid : content array array; columns : int; rows : int }
 
   let init file =
     let ci = open_in file in
-    let rec aux_parse i acc =
+    let rec aux_parse row acc =
       match input_line ci with
       | s ->
-          aux_parse (i + 1)
-            (Array.init (String.length s) (fun j ->
-                 match s.[j] with
+          aux_parse (row + 1)
+            (Array.init (String.length s) (fun col ->
+                 match s.[col] with
                  | '.' -> Empty
-                 | '>' -> Cell { dir = East; i; j }
-                 | 'v' -> Cell { dir = South; i; j }
+                 | '>' -> Cell { dir = East; row; col }
+                 | 'v' -> Cell { dir = South; row; col }
                  | _ -> assert false)
             :: acc)
       | exception End_of_file ->
@@ -59,12 +59,12 @@ module Grid = struct
             (east, south) a)
         (CSet.empty, CSet.empty) t
     in
-    let width, height = Array.Matrix.width_height t in
-    ( { grid = t; width; height },
+    let rows, columns = Array.Matrix.rows_columns t in
+    ( { grid = t; columns; rows },
       res,
-      { grid = Array.make_matrix height width Empty; width; height },
-      Array.make width Empty,
-      Array.make height Empty )
+      { grid = Array.make_matrix rows columns Empty; columns; rows },
+      Array.make columns Empty,
+      Array.make rows Empty )
 
   let pp_cell ppf c =
     match c with
@@ -85,31 +85,31 @@ module Grid = struct
   let move cell set t new_t left top =
     let open Cell in
     (* Possible new cell *)
-    let ni, nj =
+    let n_row, n_col =
       match cell.dir with
-      | East -> (cell.i, (cell.j + 1) mod t.width)
-      | South -> ((cell.i + 1) mod t.height, cell.j)
+      | East -> (cell.row, (cell.col + 1) mod t.columns)
+      | South -> ((cell.row + 1) mod t.rows, cell.col)
     in
     (* Handling east so we check if the original array is empty or not *)
     (* If ni, nj is already occupied, don't go there *)
-    let nci, ncj, changed =
+    let nc_row, nc_col, changed =
       if
-        t.grid.(ni).(nj) <> Empty
-        || new_t.grid.(ni).(nj) <> Empty
-        || (ni < cell.i && top.(cell.j) <> Empty)
-        || (nj < cell.j && left.(cell.i) <> Empty)
-      then (cell.i, cell.j, false)
-      else (ni, nj, true)
+        t.grid.(n_row).(n_col) <> Empty
+        || new_t.grid.(n_row).(n_col) <> Empty
+        || (n_row < cell.row && top.(cell.col) <> Empty)
+        || (n_col < cell.col && left.(cell.row) <> Empty)
+      then (cell.row, cell.col, false)
+      else (n_row, n_col, true)
     in
-    if cell.j = 0 && is_east cell.dir then
-      left.(cell.i) <- t.grid.(cell.i).(cell.j);
-    if cell.i = 0 && is_south cell.dir then
-      top.(cell.j) <- t.grid.(cell.i).(cell.j);
+    if cell.col = 0 && is_east cell.dir then
+      left.(cell.row) <- t.grid.(cell.row).(cell.col);
+    if cell.row = 0 && is_south cell.dir then
+      top.(cell.col) <- t.grid.(cell.row).(cell.col);
     (* Format.eprintf "Left: %a@." pp_lt left; *)
     (* Format.eprintf "Top: %a@." pp_lt top; *)
-    t.grid.(cell.i).(cell.j) <- Empty;
-    let cell = { cell with i = nci; j = ncj } in
-    new_t.grid.(nci).(ncj) <- Cell cell;
+    t.grid.(cell.row).(cell.col) <- Empty;
+    let cell = { cell with row = nc_row; col = nc_col } in
+    new_t.grid.(nc_row).(nc_col) <- Cell cell;
     (CSet.add cell set, changed)
 
   let reset lt =

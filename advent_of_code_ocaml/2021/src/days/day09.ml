@@ -1,11 +1,17 @@
 open Mdrp_lib
-open Array
 
 let check_neighbours a i j v =
-  (match a.?(i - 1) with None -> true | Some a' -> a'.(j) > v)
-  && (match a.?(i + 1) with None -> true | Some a' -> a'.(j) > v)
-  && (match a.(i).?(j - 1) with None -> true | Some v' -> v' > v)
-  && match a.(i).?(j + 1) with None -> true | Some v' -> v' > v
+  (match a.(i - 1) with
+  | a' -> a'.(j) > v
+  | exception Invalid_argument _ -> true)
+  && (match a.(i + 1) with
+     | a' -> a'.(j) > v
+     | exception Invalid_argument _ -> true)
+  && (match a.(i).(j - 1) with
+     | v' -> v' > v
+     | exception Invalid_argument _ -> true)
+  &&
+  match a.(i).(j + 1) with v' -> v' > v | exception Invalid_argument _ -> true
 
 let part_1 file =
   let a =
@@ -34,12 +40,12 @@ let pp_cell ppf { value; basin } = Format.fprintf ppf "{%d; %d}" value basin
 module IM = Int.Map
 
 let rec mark a i j b acc =
-  match a.?(i) with
-  | None -> acc
-  | Some a' -> (
-      match a'.?(j) with
-      | None -> acc
-      | Some { value; basin } ->
+  match a.(i) with
+  | exception Invalid_argument _ -> acc
+  | a' -> (
+      match a'.(j) with
+      | exception Invalid_argument _ -> acc
+      | { value; basin } ->
           if basin > 0 || value = 9 then acc
           else (
             (* Mark this cell as belonging to the current basin and explore *)

@@ -1,16 +1,16 @@
 open Mdrp_lib
 
 let flash a =
-  let rec flash i j =
-    let value = a.(i).(j) in
+  let rec flash row col =
+    let value = a.(row).(col) in
     if value > 9 then (
-      a.(i).(j) <- -1;
+      a.(row).(col) <- -1;
       Seq.iter
-        (fun (i, j) ->
-          let v = a.(i).(j) in
-          if v > -1 then a.(i).(j) <- v + 1;
-          flash i j)
-        (Array.Matrix.moore_neighbourhood a i j))
+        (fun (row, col) ->
+          let v = a.(row).(col) in
+          if v > -1 then a.(row).(col) <- v + 1;
+          flash row col)
+        (Array.Matrix.moore_neighbourhood a ~row ~col))
   in
   Array.iteri
     (fun i a' ->

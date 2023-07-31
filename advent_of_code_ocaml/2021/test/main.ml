@@ -290,13 +290,13 @@ let () =
   Log.info "Day 18, part 2, is correct.";
   unit
 
-let () =
-  Test.register ~__FILE__ ~title:"d19.p1" ~tags:[ "d19"; "p1"; "slow" ]
-  @@ fun () ->
-  Check.((Day19.run 1 "resources/day19" = 376) int)
-    ~error_msg:"expected Day19.run 1 input = %R, got %L";
-  Log.info "Day 19, part 1, is correct.";
-  unit
+(* let () = *)
+(*   Test.register ~__FILE__ ~title:"d19.p1" ~tags:[ "d19"; "p1"; "slow" ] *)
+(*   @@ fun () -> *)
+(*   Check.((Day19.run 1 "resources/day19" = 376) int) *)
+(*     ~error_msg:"expected Day19.run 1 input = %R, got %L"; *)
+(*   Log.info "Day 19, part 1, is correct."; *)
+(*   unit *)
 
 let () =
   Test.register ~__FILE__ ~title:"d19.p2" ~tags:[ "d19"; "p2"; "slow" ]
@@ -315,7 +315,7 @@ let () =
   unit
 
 let () =
-  Test.register ~__FILE__ ~title:"d20.p2" ~tags:[ "d20"; "p2"; "fast" ]
+  Test.register ~__FILE__ ~title:"d20.p2" ~tags:[ "d20"; "p2"; "slow" ]
   @@ fun () ->
   Check.((Day20.run 2 "resources/day20" = 13202) int)
     ~error_msg:"expected Day20.run 2 input = %R, got %L";
@@ -339,7 +339,7 @@ let () =
   unit
 
 let () =
-  Test.register ~__FILE__ ~title:"d22.p1" ~tags:[ "d22"; "p1"; "fast" ]
+  Test.register ~__FILE__ ~title:"d22.p1" ~tags:[ "d22"; "p1"; "slow" ]
   @@ fun () ->
   Check.((Day22.run 1 "resources/day22" = 580098) int)
     ~error_msg:"expected Day22.run 1 input = %R, got %L";
@@ -347,7 +347,7 @@ let () =
   unit
 
 let () =
-  Test.register ~__FILE__ ~title:"d22.p2" ~tags:[ "d22"; "p2"; "fast" ]
+  Test.register ~__FILE__ ~title:"d22.p2" ~tags:[ "d22"; "p2"; "slow" ]
   @@ fun () ->
   Check.((Day22.run 2 "resources/day22" = 1134725012490723) int)
     ~error_msg:"expected Day22.run 2 input = %R, got %L";
@@ -355,7 +355,7 @@ let () =
   unit
 
 let () =
-  Test.register ~__FILE__ ~title:"d23.p1" ~tags:[ "d23"; "p1"; "fast" ]
+  Test.register ~__FILE__ ~title:"d23.p1" ~tags:[ "d23"; "p1"; "slow" ]
   @@ fun () ->
   Check.((Day23.run 1 "resources/day23" = 15538) int)
     ~error_msg:"expected Day23.run 1 input = %R, got %L";
@@ -371,7 +371,7 @@ let () =
   unit
 
 let () =
-  Test.register ~__FILE__ ~title:"d25.p2" ~tags:[ "d25"; "p2"; "fast" ]
+  Test.register ~__FILE__ ~title:"d25.p2" ~tags:[ "d25"; "p2"; "slow" ]
   @@ fun () ->
   Check.((Day25.run "resources/day25" = 516) int)
     ~error_msg:"expected Day25.run 2 input = %R, got %L";

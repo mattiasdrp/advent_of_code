@@ -2,20 +2,20 @@ open Mdrp_lib
 
 module Cell = struct
   type t = {
-    i : int;
-    j : int;
+    row : int;
+    col : int;
     risk : int;
     mutable distance : int;
     mutable visited : bool;
   }
 
   let compare c1 c2 =
-    let c = compare c1.j c2.j in
-    if c = 0 then compare c1.i c2.i else c
+    let c = compare c1.col c2.col in
+    if c = 0 then compare c1.row c2.row else c
 
-  let pp ppf { i; j; risk; distance; visited } =
-    Format.fprintf ppf "{i: %d; j: %d; risk: %d; distance: %d; %b}" i j risk
-      distance visited
+  let pp ppf { col; row; risk; distance; visited } =
+    Format.fprintf ppf "{col: %d; row: %d; risk: %d; distance: %d; %b}" col row
+      risk distance visited
 
   let priority { distance; _ } = distance
 end
@@ -94,7 +94,7 @@ let dijkstra matrix =
   let module CellSet : SetType with type elt = Cell.t = (val cellset) in
   let open Cell in
   matrix.(0).(0).distance <- 0;
-  let width, height = Array.Matrix.width_height matrix in
+  let rows, columns = Array.Matrix.rows_columns matrix in
   let rec dijsktra current modified =
     (* Format.eprintf "@[<v 2>%a@." Array.Matrix.(pp Cell.(pp ~verbosity:1)) matrix; *)
     let modified =
@@ -109,10 +109,11 @@ let dijkstra matrix =
             else modified
           else modified)
         modified
-        (Array.Matrix.neumann_neighbourhood matrix current.i current.j)
+        (Array.Matrix.neumann_neighbourhood matrix ~row:current.row
+           ~col:current.col)
     in
     current.visited <- true;
-    if current.i = height - 1 && current.j = width - 1 then current.distance
+    if current.col = rows - 1 && current.row = columns - 1 then current.distance
     else
       let current, modified = CellSet.get_min_distance modified in
       dijsktra current modified
@@ -121,7 +122,7 @@ let dijkstra matrix =
 
 let greedy_shortest_path matrix =
   let open Cell in
-  let width, height = Array.Matrix.width_height matrix in
+  let rows, columns = Array.Matrix.rows_columns matrix in
 
   let queue = Queue.create () in
   Queue.add matrix.(0).(0) queue;
@@ -137,8 +138,9 @@ let greedy_shortest_path matrix =
         if distance > new_dist then (
           cell.distance <- new_dist;
           Queue.add cell queue (* cell.visited <- true *)))
-      (Array.Matrix.neumann_neighbourhood matrix current.i current.j);
-    if Queue.is_empty queue then matrix.(width - 1).(height - 1).distance
+      (Array.Matrix.neumann_neighbourhood matrix ~row:current.row
+         ~col:current.col);
+    if Queue.is_empty queue then matrix.(columns - 1).(rows - 1).distance
     else loop ()
   in
   loop ()
@@ -146,21 +148,21 @@ let greedy_shortest_path matrix =
 let init_matrix file =
   let _, matrix =
     Parse.fold_lines
-      (fun (i, matrix) s ->
+      (fun (row, matrix) s ->
         let line =
           String.to_arrayi
-            (fun j c ->
+            (fun col c ->
               Cell.
                 {
-                  i;
-                  j;
+                  col;
+                  row;
                   risk = Char.to_digit c;
                   distance = max_int / 2;
                   visited = false;
                 })
             s
         in
-        (i + 1, line :: matrix))
+        (row + 1, line :: matrix))
       (0, []) file
   in
   matrix |> List.rev |> Array.of_list
@@ -178,17 +180,17 @@ let part_1 file algo =
 let part_2 file algo =
   let open Cell in
   let matrix = init_matrix file in
-  let width, height = Array.Matrix.width_height matrix in
+  let rows, columns = Array.Matrix.rows_columns matrix in
   let matrix =
-    Array.init (5 * width) (fun i ->
-        Array.init (5 * height) (fun j ->
-            let cell = matrix.(i mod height).(j mod height) in
-            let risk = cell.risk + (i / height) + (j / height) in
+    Array.init (5 * rows) (fun row ->
+        Array.init (5 * columns) (fun col ->
+            let cell = matrix.(row mod rows).(col mod columns) in
+            let risk = cell.risk + (row / rows) + (col / columns) in
             let risk =
               if risk > 9 then if risk mod 9 = 0 then 9 else risk mod 9
               else risk
             in
-            { i; j; risk; distance = max_int / 2; visited = false }))
+            { col; row; risk; distance = max_int / 2; visited = false }))
   in
   (* Format.eprintf "@[<v 2>%a@." Array.Matrix.(pp Cell.(pp ~verbosity:0)) matrix; *)
   match algo with
