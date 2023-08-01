@@ -2,3 +2,7 @@
 	path = resources
 	url = git@github.com:mattiasdrp/aoc_resources.git
 	branch = main
+[submodule "advent_of_code_ocaml/mdrp_lib"]
+	path = advent_of_code_ocaml/mdrp_lib
+	url = git@github.com:mattiasdrp/mdrp_lib.git
+	branch = main
