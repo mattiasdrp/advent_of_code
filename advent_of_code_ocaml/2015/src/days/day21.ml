@@ -105,11 +105,6 @@ let rings =
 
 let two_rings = Seq.subsets 2 rings
 
-let parse ci =
-  match String.split_on_char ':' (input_line ci) with
-  | [ _; v ] -> int_of_string (String.sub v 1 (String.length v - 1))
-  | _ -> assert false
-
 let itemize_player score compare init_score ~boss ~player ~weapons ~armors
     ~rings =
   let score = score boss in
@@ -144,6 +139,11 @@ let itemize_player score compare init_score ~boss ~player ~weapons ~armors
   in
 
   aux init_score weapons armors rings
+
+let parse ci =
+  match String.split_on_char ':' (input_line ci) with
+  | [ _; v ] -> int_of_string (String.sub v 1 (String.length v - 1))
+  | _ -> assert false
 
 let boss_player file =
   let ci = open_in file in
