@@ -54,8 +54,6 @@ let part_2 file =
         assert false
   in
   let sue = aux_parse () in
-  (* Format.eprintf "set: %a@." SSet.(pp ()) set; *)
-  Format.eprintf "%a@." Day16_ast.Sue.pp sue;
-  0
+  sue.id
 
 let run part file = match part with 1 -> part_1 file | _ -> part_2 file

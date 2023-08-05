@@ -73,7 +73,6 @@ let steps_to_reach regexps molecule =
   let rec aux prioqueue =
     let _, (line, steps), prioqueue = PrioQueue.extract prioqueue in
     Hashtbl.add seen line ();
-    Format.eprintf "%s, %d@." line steps;
     let replacements = replacements regexps line in
     try
       let prioqueue =
