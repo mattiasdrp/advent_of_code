@@ -1,0 +1,12 @@
+(documentation
+ (package days))
+
+(library
+ (name days)
+ (public_name days)
+ (libraries mdrp_lib str))
+
+(env
+ (dev
+  (flags
+   (:standard -warn-error -A))))
