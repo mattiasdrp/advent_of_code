@@ -1,6 +1,13 @@
 (documentation
  (package days))
 
+(ocamllex
+  (modules day02_lexer))
+
+(menhir
+  (modules day02_parser)
+  (flags -la 2))
+
 (library
  (name days)
  (public_name days)
