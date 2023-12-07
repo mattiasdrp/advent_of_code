@@ -13,11 +13,10 @@ end
 
 def combinations((time, dist))
   # We solve f(t) = t * (time - t) >= dist
-  delta = time**2 - 4 * dist
-  x1 = (time - Math.sqrt(delta)) / 2
-  x2 = (time + Math.sqrt(delta)) / 2
-  x1 += 1 if x1 == x1.to_i || x2 == x2.to_i
-  x2.to_i - x1.to_i
+  delta = Math.sqrt(time**2 - 4 * dist)
+  x1 = ((time - delta) / 2 + 1).floor
+  x2 = ((time + delta) / 2 - 1).ceil
+  x2 - x1 + 1
 end
 
 def compute(file, part)
