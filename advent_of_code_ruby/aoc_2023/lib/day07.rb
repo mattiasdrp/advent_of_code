@@ -50,7 +50,7 @@ class JokerHand < Hand
     # nb_joker here is nil or an int
     nb_jokers = occurences.delete(0)
     # Since we want to add the jokers to the maximum number of occurrences
-    # we need to sort the occurrences
+    # we need to sort the occurrences in reverse order
     values = occurences.empty? ? [0] : occurences.values.sort_by(&:-@)
     # nil being the only falsey value, this adds either
     # the number of jokers if non nil or 0
