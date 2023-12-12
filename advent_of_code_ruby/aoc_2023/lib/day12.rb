@@ -18,28 +18,23 @@ class Solver
 
   private
 
-  def nb_combinations_aux(line, line_index, group, groups, next_group_index, tmp_line)
-    # puts "line #{line[line_index..]}"
-    # puts "  group #{group}"
-    # puts "  groups #{groups[next_group_index - 1..]} "
-    # puts "  tmp_line #{tmp_line.join}"
-
+  def nb_combinations_aux(line, group, groups)
     # If we consumed too much or not enough # we exit early
     return 0 if !group.nil? && group.negative?
 
-    case line[line_index]
+    case line[0]
     in "#"
       if !group.nil?
         # If we see # and are consuming a group, keep consuming
-        nb_combinations_aux(line, line_index + 1, group - 1, groups, next_group_index, tmp_line + ["#"])
+        nb_combinations_aux(line[1..], group - 1, groups)
       else
         # We were not in a group
         # If we don't have any more groups, end this branch
-        return 0 if next_group_index >= groups.length
+        return 0 if groups.empty?
 
         # Otherwise, let's start consuming the next one
-        group = groups[next_group_index]
-        nb_combinations_aux(line, line_index + 1, group - 1, groups, next_group_index + 1, tmp_line + ["#"])
+        group = groups[0]
+        nb_combinations_aux(line[1..], group - 1, groups[1..])
       end
     in "."
       # It should be noted that . (and ? as .) is the only character that can
@@ -50,52 +45,46 @@ class Solver
           # If we didn't finish the current group, end this branch
           0
         else
-          nb_combinations_aux(line, line_index + 1, nil, groups, next_group_index, tmp_line + ["."])
+          nb_combinations_aux(line[1..], nil, groups)
         end
       else
         # If we see . and are not consuming a group
-        nb_combinations_aux(line, line_index + 1, nil, groups, next_group_index, tmp_line + ["."])
+        nb_combinations_aux(line[1..], nil, groups)
       end
     in "?"
       if !group.nil? && group.positive?
         # We are consuming a group and did not finish it, ? can't be anything else than #
-        nb_combinations_aux(line, line_index + 1, group - 1, groups, next_group_index, tmp_line + ["#"])
+        nb_combinations_aux(line[1..], group - 1, groups)
       elsif !group.nil? && group.zero?
         # We were consuming a group and finished it, ? can't be anything else than .
-        nb_combinations_aux(line, line_index + 1, nil, groups, next_group_index, tmp_line + ["."])
+        nb_combinations_aux(line[1..], nil, groups)
       elsif group.nil?
-        memo_key = [line[line_index..], group, groups[next_group_index..]]
+        memo_key = [line, group, groups]
         memo_value = @memo[memo_key]
         return memo_value unless memo_value.nil?
 
         # We are not consuming a group, here we create 2 branches:
         # - one where we treat ? as # if we have more groups to consume
         q_as_sharp =
-          if next_group_index >= groups.length
+          if groups.empty?
             0
           else
-            group = groups[next_group_index]
-            nb_combinations_aux(line, line_index + 1, group - 1, groups, next_group_index + 1, tmp_line + ["#"])
+            group = groups[0]
+            nb_combinations_aux(line[1..], group - 1, groups[1..])
           end
         # - one where we treat ? as .
-        q_as_dot = nb_combinations_aux(line, line_index + 1, nil, groups, next_group_index, tmp_line + ["."])
+        q_as_dot = nb_combinations_aux(line[1..], nil, groups)
         res = q_as_dot + q_as_sharp
         @memo[memo_key] = res
         res
       end
     else
-      if next_group_index == groups.length && (group.nil? || group.zero?)
-        # puts "  --- FOUND #{tmp_line.join} ---"
-        # puts "    for #{line} #{groups} ---"
-        1
-      else
-        0
-      end
+      groups.empty? && (group.nil? || group.zero?) ? 1 : 0
     end
   end
 
   def nb_combinations(line, groups)
-    nb_combinations_aux(line, 0, nil, groups, 0, [])
+    nb_combinations_aux(line, nil, groups)
   end
 end
 
