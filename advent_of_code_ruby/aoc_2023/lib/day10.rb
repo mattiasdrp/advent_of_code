@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 Cell = Data.define(:type, :dirs)
 
 def parse(file)
