@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 Beam = Data.define(:row, :col, :dir) do
   private_constant
 
