@@ -1,4 +1,12 @@
-Mod = Data.define(:type, :content, :dest)
+Mod = Data.define(:type, :content, :dest) do
+  def pretty_print(pp)
+    pp.pp type
+    pp.text " "
+    pp.pp content
+    pp.text " "
+    pp.pp dest
+  end
+end
 
 def parse(line, map)
   matchings = /(%|&)?(\w+) -> ([\w, ]+)/.match(line)
@@ -18,7 +26,7 @@ end
 
 State = Data.define(:node, :from, :beam)
 
-def press_button(map)
+def press_button(map, target = nil)
   queue = [State[node: :broadcaster, from: nil, beam: :low]]
   high_beams = 0
   low_beams = 1
@@ -39,7 +47,16 @@ def press_button(map)
              end
     elsif node.type == :conjunction
       node.content[state.from] = beam
-      beam = node.content.all? { |_, value| value == :high } ? :low : :high
+      # beam = node.content.all? { |_, value| value == :high } ? :low : :high
+      beam =
+        if node.content.all? { |_, value| value == :high }
+          return nil if target == state.node
+
+          :low
+        else
+
+          :high
+        end
     end
 
     map[state.node].dest.each do |nnode|
@@ -48,7 +65,7 @@ def press_button(map)
       else
         low_beams += 1
       end
-      puts "#{state.node} -#{beam}-> #{nnode}"
+      # puts "#{state.node} -#{beam}-> #{nnode}"
       queue << State[node: nnode, from: state.node, beam:]
     end
   end
@@ -58,8 +75,7 @@ end
 def loop(map)
   high_beams = 0
   low_beams = 0
-  10.times do
-    puts "\n---------------------"
+  1000.times do
     hb, lb = press_button(map)
     high_beams += hb
     low_beams += lb
@@ -82,8 +98,27 @@ end
 
 def part1(file)
   map = parse_map(file)
-  hb, lb = loop(map)
-  hb * lb
+  # initial = map.clone
+  high_beams, low_beams = loop(map)
+  high_beams * low_beams
 end
 
-pp part1(ARGV[0])
+def loop2(map, target)
+  (1..).each do |step|
+    return step if press_button(map, target).nil?
+  end
+end
+
+def part2(file)
+  map1 = parse_map(file)
+  map2 = parse_map(file)
+  map3 = parse_map(file)
+  map4 = parse_map(file)
+  step_qz = loop2(map1, :zq)
+  step_cq = loop2(map2, :kx)
+  step_jx = loop2(map3, :zd)
+  step_tt = loop2(map4, :mt)
+  [step_cq, step_jx, step_qz, step_tt].reduce(&:lcm)
+end
+
+pp(ARGV[1] == "1" ? part1(ARGV[0]) : part2(ARGV[0]))
