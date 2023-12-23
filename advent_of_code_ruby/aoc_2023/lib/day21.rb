@@ -10,60 +10,52 @@ def parse(file)
   [grid, start]
 end
 
-def update_pos(grid, row, col, new_pos, set)
-  return if row.negative? || row >= grid.length || col.negative? || col >= grid[0].length || grid[row][col] == "#"
+def update_pos(part, grid, row, col, new_pos, set)
+  return if
+    (part == 1 && (row.negative? || row >= grid.length || col.negative? || col >= grid[0].length)) ||
+    grid[row % grid.length][col % grid[0].length] == "#"
 
-  set.add([row, col])
   new_pos << [row, col]
+  !set.add?([row, col]).nil?
 end
 
-def part(file, steps)
+def even_odd_cycle(part, file, steps)
   grid, start = parse(file)
-  even_odd = [Set[], Set[]]
   gardener_pos = [start]
   visited = []
-  memo = {}
-  steps.times do |step|
-    puts step if step % 1000 == 0
+  _, curr, steps = (0...steps).reduce([Set[], Set[]]) do |even_odd, step|
     curr, other = even_odd
-    break unless memo[gardener_pos].nil?
-
     visited += gardener_pos
     new_pos = []
-    gardener_pos.each do |(row, col)|
-      update_pos(grid, row, col - 1, new_pos, curr)
-      update_pos(grid, row, col + 1, new_pos, curr)
-      update_pos(grid, row - 1, col, new_pos, curr)
-      update_pos(grid, row + 1, col, new_pos, curr)
+    updated = gardener_pos.reduce(false) do |updated, (row, col)|
+      updated |
+        update_pos(part, grid, row, col - 1, new_pos, curr) |
+        update_pos(part, grid, row, col + 1, new_pos, curr) |
+        update_pos(part, grid, row - 1, col, new_pos, curr) |
+        update_pos(part, grid, row + 1, col, new_pos, curr)
     end
     gardener_pos = new_pos.uniq - visited
-    memo[gardener_pos] = true
-    # pp gardener_pos
-    # puts "----------------"
-    even_odd = other, curr
+    break [other, curr, step] unless updated
+
+    [other, curr, steps]
   end
-  odd, even = even_odd.map(&:to_a)
-  # (0...grid.length).each do |row|
-  #   (0...grid[0].length).each do |col|
-  #     if odd.include?([row, col])
-  #       print "O"
-  #     else
-  #       print grid[row][col]
-  #     end
-  #   end
-  #   puts
-  # end
-  # (0...grid.length).each do |row|
-  #   (0...grid[0].length).each do |col|
-  #     if even.include?([row, col])
-  #       print "O"
-  #     else
-  #       print grid[row][col]
-  #     end
-  #   end
-  #   puts
-  # end
-  [even.length, odd.length]
+  curr.to_a.length
 end
 
-puts(ARGV[1] == "1" ? part(ARGV[0], 64) : part(ARGV[0], 26_501_365))
+def part(part, file, steps)
+  res = even_odd_cycle(part, file, steps)
+  puts "#{res}"
+end
+
+if ARGV[1] == "1"
+  part(1, ARGV[0], 64)
+
+else
+  part(2, ARGV[0], 65)
+  part(2, ARGV[0], 196)
+  part(2, ARGV[0], 327)
+end
+
+# Quadratic formula solution
+# From : https://www.wolframalpha.com/input?i=quadratic+fit+calculator&assumption=%7B%22F%22%2C+%22QuadraticFitCalculator%22%2C+%22data3x%22%7D+-%3E%22%7B0%2C+1%2C+2%7D%22&assumption=%7B%22F%22%2C+%22QuadraticFitCalculator%22%2C+%22data3y%22%7D+-%3E%22%7B3691%2C+32975%2C+91439%7D%22
+puts(3691 + 14_694 * 202_300 + 14_590 * (202_300**2))
