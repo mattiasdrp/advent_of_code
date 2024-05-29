@@ -1,0 +1,37 @@
+(lang dune 3.8)
+
+(implicit_transitive_deps true)
+
+; Since we want to generate opam files we need to provide informations ;
+(generate_opam_files true)
+
+(name aoc_2016)
+(version dev)
+(authors "mattiasdrp")
+(maintainers "mattiasdrp")
+(source (github mattiasdrp/advent_of_code))
+; Not specifying bug_reports since it defaults to the github issue page
+
+; Packages
+
+(package
+ (name aoc_2016)
+ (synopsis "aoc_2016 executable")
+ (description "\
+TODO")
+ (depends
+   ocaml
+   dune
+  (odoc :with-doc)
+ )
+)
+
+(package
+ (name days)
+ (synopsis "aoc_2016 days solutions")
+ (description "\
+TODO")
+ (depends
+   ocaml
+   dune
+  (odoc :with-doc)))
