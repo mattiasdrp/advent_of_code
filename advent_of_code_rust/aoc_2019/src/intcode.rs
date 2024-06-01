@@ -1,3 +1,5 @@
+use std::collections::VecDeque;
+
 #[derive(Debug, PartialEq, Eq, Clone, Copy)]
 enum BinOp {
     Add,
@@ -73,12 +75,22 @@ impl Mode {
     }
 }
 
+#[derive(Debug, PartialEq, Eq, Clone, Copy)]
+pub enum State {
+    Halted,
+    WaitingInput,
+    Running,
+    Output(isize),
+}
+
 #[derive(Debug, PartialEq, Eq, Clone)]
 pub struct IntCode {
+    identifier: usize,
     program_counter: usize,
     buffer: Vec<isize>,
-    input_buffer: Vec<isize>,
+    input_buffer: VecDeque<isize>,
     last_output: isize,
+    state: State,
 }
 
 #[derive(Debug, PartialEq, Eq)]
@@ -152,7 +164,7 @@ impl IntCode {
         }
     }
 
-    pub fn intcode_loop(&mut self) -> isize {
+    pub fn intcode_loop(&mut self) -> State {
         'halt: loop {
             // println!("operation: {:?}", self.operation());
             match self.operation() {
@@ -179,7 +191,6 @@ impl IntCode {
                             Mode::Immediate => *value,
                         })
                         .collect();
-                    // println!("operands: {:?}", operands);
                     let cmpop = cmpop.to_fn();
                     if cmpop(operands[0]) {
                         self.program_counter = operands[1] as usize
@@ -188,10 +199,19 @@ impl IntCode {
                     }
                 }
 
-                Operation::Halt => break 'halt,
+                Operation::Halt => {
+                    self.state = State::Halted;
+                    break 'halt;
+                }
+
                 Operation::Input(index) => {
-                    self.buffer[index] = self.input_buffer.pop().unwrap();
-                    self.program_counter += 2;
+                    if let Some(input) = self.input_buffer.pop_front() {
+                        self.buffer[index] = input;
+                        self.program_counter += 2;
+                    } else {
+                        self.state = State::WaitingInput;
+                        break 'halt;
+                    }
                 }
                 Operation::Output(index, mode) => {
                     let output = match mode {
@@ -199,13 +219,14 @@ impl IntCode {
                         Mode::Position => self.buffer[index],
                     };
                     self.last_output = output;
-                    println!("{output}");
                     self.program_counter += 2;
+                    self.state = State::Output(output);
+                    break 'halt;
                 }
             };
             // println!("{:?}", self);
         }
-        self.buffer[0]
+        self.state
     }
 
     pub fn set(&mut self, index: usize, value: isize) {
@@ -213,7 +234,23 @@ impl IntCode {
     }
 
     pub fn set_input(&mut self, value: isize) {
-        self.input_buffer.push(value);
+        self.input_buffer.push_back(value);
+    }
+
+    pub fn set_identifier(&mut self, identifier: usize) {
+        self.identifier = identifier
+    }
+
+    pub fn get_identifier(&self) -> usize {
+        self.identifier
+    }
+
+    pub fn get_output(&self) -> isize {
+        self.last_output
+    }
+
+    pub fn get(&self, index: usize) -> isize {
+        self.buffer[index]
     }
 
     pub fn new(string: &str) -> Self {
@@ -223,10 +260,12 @@ impl IntCode {
             .map(|v| v.parse::<isize>().unwrap())
             .collect();
         Self {
+            identifier: 0,
             program_counter: 0,
             buffer,
-            input_buffer: vec![0; 0],
+            input_buffer: VecDeque::new(),
             last_output: 0,
+            state: State::Running,
         }
     }
 }

@@ -1,5 +1,5 @@
-use crate::utils::read_lines;
-use std::{collections::HashMap, path::Path};
+use aoc_utils::file_utils::read_lines;
+use std::path::Path;
 
 pub trait Mass {
     fn required_fuel(self) -> Self;
@@ -35,7 +35,6 @@ fn resolve2<P>(filename: P) -> isize
 where
     P: AsRef<Path>,
 {
-    let _memo: HashMap<isize, isize> = HashMap::new();
     read_lines(filename).unwrap().fold(0, |acc, mass| {
         acc + mass
             .unwrap()
