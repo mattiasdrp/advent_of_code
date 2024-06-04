@@ -5,10 +5,10 @@ use std::path::Path;
 fn parse(move_str: &str, prev_point: &Point) -> Point {
     let delta = move_str[1..].parse::<isize>().unwrap();
     match move_str.as_bytes()[0] {
-        b'R' => prev_point.update(delta, 0),
-        b'L' => prev_point.update(-delta, 0),
-        b'U' => prev_point.update(0, -delta),
-        b'D' => prev_point.update(0, delta),
+        b'R' => prev_point.translate(delta, 0),
+        b'L' => prev_point.translate(-delta, 0),
+        b'U' => prev_point.translate(0, -delta),
+        b'D' => prev_point.translate(0, delta),
         c => panic!("{c} is not a proper direction"),
     }
 }
@@ -28,7 +28,7 @@ fn resolve1(lines1: &[Line], lines2: &[Line]) -> isize {
     let mut result = std::usize::MAX;
     for line1 in lines1.iter() {
         for line2 in lines2.iter() {
-            match line1.grid_intersection(line2) {
+            match line1.grid_line_intersection(line2) {
                 Some(point) if point != Point::default() => {
                     result = result.min(point.manhattan_distance(&Point::default()));
                 }
@@ -43,7 +43,7 @@ fn resolve2(lines1: &[Line], lines2: &[Line]) -> isize {
     let mut total_steps = usize::MAX;
     lines1.iter().fold(0, |curr_steps1, line1| {
         lines2.iter().fold(0, |curr_steps2, line2| {
-            match line1.grid_intersection(line2) {
+            match line1.grid_line_intersection(line2) {
                 Some(point) if point != Point::default() => {
                     // steps from 0 to the current intersection point through the first wire
                     let steps1 = curr_steps1 + point.manhattan_distance(&line1.start);

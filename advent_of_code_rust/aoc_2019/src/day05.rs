@@ -16,7 +16,7 @@ where
     } else {
         intcode.set_input(input);
     }
-    if let intcode::State::Halted = intcode.intcode_loop() {
+    if let intcode::State::Halted = intcode.intcode_loop(false) {
         intcode.get_output()
     } else {
         panic!("Intcode should have ended on Halted state")

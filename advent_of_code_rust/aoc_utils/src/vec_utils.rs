@@ -50,3 +50,16 @@ where
         }
     }
 }
+
+pub fn combinations<T>(vec: &[T]) -> Vec<(T, T)>
+where
+    T: Clone,
+{
+    let mut res = Vec::new();
+    for (i, el1) in vec.iter().enumerate() {
+        for el2 in vec[i + 1..].iter() {
+            res.push((el1.clone(), el2.clone()))
+        }
+    }
+    res
+}

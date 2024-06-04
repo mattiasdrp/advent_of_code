@@ -1,6 +1,8 @@
 use std::str::FromStr;
 
-#[derive(Default, Debug, PartialEq, Copy, Clone)]
+use super::angle;
+
+#[derive(Default, Debug, Eq, Hash, PartialEq, Copy, Clone)]
 pub struct Point {
     pub row: isize,
     pub col: isize,
@@ -14,7 +16,12 @@ impl Point {
         Self { row, col }
     }
 
-    pub fn update(&self, drow: isize, dcol: isize) -> Self {
+    pub fn update(&mut self, drow: isize, dcol: isize) {
+        self.row += drow;
+        self.col += dcol;
+    }
+
+    pub fn translate(&self, drow: isize, dcol: isize) -> Self {
         Point {
             row: self.row + drow,
             col: self.col + dcol,
@@ -23,6 +30,18 @@ impl Point {
 
     pub fn manhattan_distance(&self, other: &Self) -> usize {
         ((self.row - other.row).abs() + (self.col - other.col).abs()) as usize
+    }
+
+    pub fn north_cw_angle_to(&self, other: &Self) -> angle::Radiant {
+        let angle = ((self.row - other.row) as f64).atan2((self.col - other.col) as f64)
+            - std::f64::consts::PI / 2.0;
+        angle::Radiant::new(angle)
+    }
+}
+
+impl From<(isize, isize)> for Point {
+    fn from((row, col): (isize, isize)) -> Self {
+        Point::new(row, col)
     }
 }
 

@@ -5,6 +5,11 @@ mod day04;
 mod day05;
 mod day06;
 mod day07;
+mod day08;
+mod day09;
+mod day10;
+mod day11;
+mod day12;
 mod intcode;
 mod utils;
 use clap::Parser;
@@ -38,12 +43,12 @@ fn main() {
             None => "".to_string(),
         }
     );
-    print!(
-        "result of day {} part {} file {} ",
+    println!(
+        "result of day {} part {} file {}",
         args.day, args.part, input
     );
     println!(
-        "is {}",
+        "  is {}",
         match args.day {
             1 => day01::resolve(args.part, input),
             2 => day02::resolve(args.part, input),
@@ -52,6 +57,11 @@ fn main() {
             5 => day05::resolve(args.part, input, args.intcode_input),
             6 => day06::resolve(args.part, input),
             7 => day07::resolve(args.part, input),
+            8 => day08::resolve(args.part, input, args.example.is_some()),
+            9 => day09::resolve(args.part, input),
+            10 => day10::resolve(args.part, input),
+            11 => day11::resolve(args.part, input),
+            12 => day12::resolve(args.part, input),
             _ => todo!(),
         }
     )

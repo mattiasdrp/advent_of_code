@@ -21,7 +21,7 @@ where
                 let mut intcode_clone = intcode.clone();
                 intcode_clone.set_input(*phase);
                 intcode_clone.set_input(output);
-                intcode_clone.intcode_loop();
+                intcode_clone.intcode_loop(false);
                 output = intcode_clone.get_output()
             });
             max_output = max_output.max(output);
@@ -41,7 +41,7 @@ where
             amplifier.set_input(0);
             let mut halted = HashSet::new();
             'exit: loop {
-                match amplifier.intcode_loop() {
+                match amplifier.intcode_loop(true) {
                     State::Halted if halted.len() == 5 => {
                         max_output = max_output.max(amplifiers[4].get_output());
                         break 'exit;
