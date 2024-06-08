@@ -1,6 +1,6 @@
 use crate::intcode::{IntCode, State};
 use aoc_utils::geometry::Point;
-use std::collections::{HashMap, HashSet};
+use std::collections::HashMap;
 use std::fs;
 use std::path::Path;
 
@@ -81,7 +81,6 @@ pub fn resolve<P>(part: u8, filename: P) -> isize
 where
     P: AsRef<Path>,
 {
-    let _ = part;
     let string = fs::read_to_string(&filename).unwrap();
     let mut intcode: IntCode = IntCode::new(&string);
     let mut grid = HashMap::new();

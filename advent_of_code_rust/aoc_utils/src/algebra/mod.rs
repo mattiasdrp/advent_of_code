@@ -2,7 +2,9 @@ use std::cmp::min;
 use std::mem::swap;
 
 // From https://en.wikipedia.org/wiki/Binary_GCD_algorithm
-pub fn gcd(mut u: usize, mut v: usize) -> usize {
+pub fn gcd(u: usize, v: usize) -> usize {
+    let mut u = u;
+    let mut v = v;
     // Base cases: gcd(n, 0) = gcd(0, n) = n
     if u == 0 {
         return v;
@@ -46,4 +48,8 @@ pub fn gcd(mut u: usize, mut v: usize) -> usize {
 
 pub fn signed_gcd(u: isize, v: isize) -> usize {
     gcd(u.unsigned_abs(), v.unsigned_abs())
+}
+
+pub fn lcm(u: isize, v: isize) -> isize {
+    u.abs() * (v.abs() / signed_gcd(u, v) as isize)
 }

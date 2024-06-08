@@ -1,5 +1,7 @@
+use aoc_utils::algebra::lcm;
+use aoc_utils::geometry::Point;
 use regex::Regex;
-use std::{fs, path::Path, str::FromStr};
+use std::{collections::HashMap, fs, path::Path, str::FromStr};
 
 #[derive(Debug, Clone)]
 pub struct Vec3 {
@@ -85,16 +87,8 @@ impl Moon {
         }
     }
 
-    fn with_vel(&mut self, vel: impl Into<Vec3>) {
-        self.vel = vel.into();
-    }
-
     fn pos(&self) -> &Vec3 {
         &self.pos
-    }
-
-    fn vel(&self) -> &Vec3 {
-        &self.vel
     }
 
     fn apply_gravity(&mut self, that: &mut Self) {
@@ -112,6 +106,18 @@ impl Moon {
 
     fn update(&mut self) {
         self.pos.update(&self.vel);
+    }
+
+    fn get_xs(&self) -> Point {
+        Point::new(self.pos.x, self.vel.x)
+    }
+
+    fn get_ys(&self) -> Point {
+        Point::new(self.pos.y, self.vel.y)
+    }
+
+    fn get_zs(&self) -> Point {
+        Point::new(self.pos.z, self.vel.z)
     }
 }
 
@@ -146,32 +152,24 @@ impl Moons {
             }
         }
     }
-    // fn apply_gravity(&mut self) {
-    //     // ignoring last moon ~~~v
-    //     for i in 0..self.len() - 1 {
-    //         // slice starting at the current moon
-    //         let mut slice = self.moons[i..].iter_mut();
-    //         // retrieve current moon
-    //         if let Some(moon1) = slice.next() {
-    //             // work on tail
-    //             for moon2 in slice {
-    //                 moon1.apply_gravity(moon2)
-    //             }
-    //         } else {
-    //             // unreachable unless we fuck up the indices
-    //             unreachable!()
-    //         }
-    //     }
-    // }
 
     fn moon_loop(&mut self) {
-        println!("before gravity {:?}", self.moons);
         self.apply_gravity();
-        println!("after gravity {:?}", self.moons);
         for moon in self.moons.iter_mut() {
             moon.update()
         }
-        println!("{:?}", self.moons);
+    }
+
+    fn get_xs(&self) -> Vec<Point> {
+        self.moons.iter().map(|moon| moon.get_xs()).collect()
+    }
+
+    fn get_ys(&self) -> Vec<Point> {
+        self.moons.iter().map(|moon| moon.get_ys()).collect()
+    }
+
+    fn get_zs(&self) -> Vec<Point> {
+        self.moons.iter().map(|moon| moon.get_zs()).collect()
     }
 }
 
@@ -186,10 +184,52 @@ where
     let moon3 = Moon::from_str(moons[2]).unwrap();
     let moon4 = Moon::from_str(moons[3]).unwrap();
     let mut moons = Moons::new([moon1, moon2, moon3, moon4]);
-    for _ in 0..1000 {
-        moons.moon_loop()
+    if part == 1 {
+        for _ in 0..1000 {
+            moons.moon_loop()
+        }
+        moons.moons.iter().fold(0, |acc, moon| {
+            acc + moon.kinetic_energy() * moon.potential_energy()
+        })
+    } else {
+        let mut index = 0;
+        let mut memox = HashMap::new();
+        memox.insert(moons.get_xs(), index);
+        let mut memoy = HashMap::new();
+        memoy.insert(moons.get_ys(), index);
+        let mut memoz = HashMap::new();
+        memoz.insert(moons.get_zs(), index);
+
+        let mut x_index = None;
+        let mut y_index = None;
+        let mut z_index = None;
+        loop {
+            index += 1;
+            moons.moon_loop();
+            if x_index.is_none() {
+                if let Some(i) = memox.insert(moons.get_xs(), index) {
+                    x_index = Some((i, index));
+                }
+            };
+            if y_index.is_none() {
+                if let Some(i) = memoy.insert(moons.get_ys(), index) {
+                    y_index = Some((i, index));
+                }
+            };
+            if z_index.is_none() {
+                if let Some(i) = memoz.insert(moons.get_zs(), index) {
+                    z_index = Some((i, index));
+                }
+            };
+            if x_index.is_some() && y_index.is_some() && z_index.is_some() {
+                break;
+            }
+        }
+        match (x_index, y_index, z_index) {
+            (Some((initx, endx)), Some((inity, endy)), Some((initz, endz))) => {
+                lcm(endx - initx, lcm(endy - inity, endz - initz))
+            }
+            _ => panic!("impossible"),
+        }
     }
-    moons.moons.iter().fold(0, |acc, moon| {
-        acc + moon.kinetic_energy() * moon.potential_energy()
-    })
 }
