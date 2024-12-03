@@ -2,15 +2,16 @@ const std = @import("std");
 const Allocator = std.mem.Allocator;
 const List = std.ArrayList;
 const Map = std.AutoHashMap;
-const StrMap = std.StringHashMap;
-const BitSet = std.DynamicBitSet;
-
-const util = @import("util.zig");
-const gpa = util.gpa;
 
 const data = @embedFile("resources/day01");
+const data_example = @embedFile("resources/day01-example");
 
-pub fn main() !void {}
+pub fn main() !void {
+    const tokens = tokenizeAny(u8, data, " ");
+    // for (tokens) |token| {
+    print("token: {}", .{tokens});
+    // }
+}
 
 // Useful stdlib functions
 const tokenizeAny = std.mem.tokenizeAny;
