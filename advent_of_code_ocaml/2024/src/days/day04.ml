@@ -130,13 +130,9 @@ module TextMatrix = struct
 end
 
 let part_1 file =
-  let matrix = Mdrp_lib.Parse.lines file |> TextMatrix.of_list in
-  Format.eprintf "@[<v 0>%a@." TextMatrix.pp matrix;
-  TextMatrix.check_xmas matrix
+  Mdrp_lib.Parse.lines file |> TextMatrix.of_list |> TextMatrix.check_xmas
 
 let part_2 file =
-  let matrix = Mdrp_lib.Parse.lines file |> TextMatrix.of_list in
-  Format.eprintf "@[<v 0>%a@." TextMatrix.pp matrix;
-  TextMatrix.check_x_mas matrix
+  Mdrp_lib.Parse.lines file |> TextMatrix.of_list |> TextMatrix.check_x_mas
 
 let run part file = match part with 1 -> part_1 file | _ -> part_2 file
