@@ -48,7 +48,6 @@ let common_part count file =
     list
   in
   let map = blink count list in
-  Format.eprintf "@[<v 0>%a@." Int.Map.(pp Int.pp) map;
   Int.Map.fold (fun _ quantity acc -> acc + quantity) map 0
 
 let run part file =
